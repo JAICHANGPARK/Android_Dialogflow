@@ -17,18 +17,23 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.github.bassaer.chatmessageview.model.ChatUser
 import com.github.bassaer.chatmessageview.model.Message
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.android.extension.responseJson
+import com.github.kittinunf.fuel.core.FuelManager
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 import java.util.logging.Logger
 
 
 class MainActivity : AppCompatActivity(), AIListener {
 
     companion object {
-        private const val ACCESS_TOKEN = "0b3c6e3b904648b4972cf6979e2e186f"
+        private const val ACCESS_TOKEN = "e161b0496a0e4816ba08215c61ea0845"
     }
 
 
     private var agent: ChatUser? = null
+    private var human: ChatUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,7 @@ class MainActivity : AppCompatActivity(), AIListener {
         val aiService = AIService.getService(this, config)
         aiService.setListener(this)
 
+
         val permission = ContextCompat.checkSelfPermission(
             this, Manifest.permission.RECORD_AUDIO
         )
@@ -52,7 +58,7 @@ class MainActivity : AppCompatActivity(), AIListener {
             makeRequest()
         }
 
-        val human = ChatUser(
+        human = ChatUser(
             2,
             "You",
             BitmapFactory.decodeResource(
@@ -64,6 +70,7 @@ class MainActivity : AppCompatActivity(), AIListener {
         agent = ChatUser(
             1,
             "Agent",
+
             BitmapFactory.decodeResource(
                 resources,
                 R.drawable.ic_account_circle
@@ -71,53 +78,53 @@ class MainActivity : AppCompatActivity(), AIListener {
         )
 
 //
-//        FuelManager.instance.baseHeaders = mapOf(
-//            "Authorization" to "Bearer $ACCESS_TOKEN"
-//        )
-//
-//        FuelManager.instance.basePath = "https://api.dialogflow.com/v1/"
-//        FuelManager.instance.baseParams = listOf(
-//            "v" to "20150910",                  // latest protocol
-//            "sessionId" to UUID.randomUUID(),   // random ID
-//            "lang" to "ko"                      // English language
-//        )
-//
-
-//
-        my_chat_view.setOnClickSendButtonListener(View.OnClickListener {
-            my_chat_view.send(
-                Message.Builder()
-                    .setRight(true)
-                    .setUser(human)
-                    .setText(my_chat_view.inputText)
-                    .build()
-            )
-
-            aiService.startListening()
-
-
-            // More code here
-
-//                Fuel.get("/query",
-//                    listOf("query" to my_chat_view.inputText))
-//                    .responseJson { _, _, result ->
-//                        val reply = result.get().obj()
-//                            .getJSONObject("result")
-//                            .getJSONObject("fulfillment")
-//                            .getString("speech")
-//                        Logger.getLogger(MainActivity::class.java.name).warning(reply)
-
-            // More code here
-//
-//                        my_chat_view.send(Message.Builder()
-//                            .setRight(true)
-//                            .setUser(agent)
-//                            .setText(reply)
-//                            .build()
-//                        )
-//                    }
-        }
+        FuelManager.instance.baseHeaders = mapOf(
+            "Authorization" to "Bearer e161b0496a0e4816ba08215c61ea0845"
         )
+
+        FuelManager.instance.basePath = "https://api.dialogflow.com/v1/"
+        FuelManager.instance.baseParams = listOf(
+            "v" to "20150910",                  // latest protocol
+            "sessionId" to UUID.randomUUID(),   // random ID
+            "lang" to "ko"                      // English language
+        )
+//
+
+//
+
+
+        my_chat_view.setOnClickSendButtonListener(View.OnClickListener {
+
+
+            //More code here
+
+            Fuel.get("/query",
+                listOf("query" to my_chat_view.inputText)
+            ).responseJson { _, _, result ->
+                val reply = result.get().obj()
+                    .getJSONObject("result")
+                    .getJSONObject("fulfillment")
+                    .getString("speech")
+                Logger.getLogger(MainActivity::class.java.name).warning(reply)
+
+//             More code here
+
+                my_chat_view.send(
+                    Message.Builder()
+                        .setRight(true)
+                        .setUser(agent!!)
+                        .setText(reply)
+                        .build()
+                )
+            }
+
+
+        }
+
+        )
+        my_chat_view.setOnClickMicButtonListener(View.OnClickListener {
+            aiService.startListening()
+        })
 
     }
 
@@ -145,9 +152,12 @@ class MainActivity : AppCompatActivity(), AIListener {
     }
 
     override fun onResult(result: AIResponse?) {
+
         Logger.getLogger(MainActivity::class.java.name).warning(result.toString())
         val tmpResult = result?.result
         if (tmpResult != null) {
+
+
             Logger.getLogger(MainActivity::class.java.name)
                 .warning(tmpResult.action + tmpResult.resolvedQuery + tmpResult.fulfillment)
             Logger.getLogger(MainActivity::class.java.name)
@@ -155,7 +165,17 @@ class MainActivity : AppCompatActivity(), AIListener {
 
             my_chat_view.send(
                 Message.Builder()
+                    .setRight(true)
+                    .setUser(this!!.human!!)
+                    .hideIcon(true)
+                    .setText(tmpResult.resolvedQuery)
+                    .build()
+            )
+
+            my_chat_view.send(
+                Message.Builder()
                     .setUser(this!!.agent!!)
+                    .hideIcon(true)
                     .setText(tmpResult.fulfillment.speech)
                     .build()
             )
@@ -163,7 +183,7 @@ class MainActivity : AppCompatActivity(), AIListener {
     }
 
     override fun onListeningStarted() {
-
+        Logger.getLogger(MainActivity::class.java.name).warning("onListeningStarted")
     }
 
     override fun onAudioLevel(level: Float) {
@@ -175,10 +195,11 @@ class MainActivity : AppCompatActivity(), AIListener {
     }
 
     override fun onListeningCanceled() {
-
+        Logger.getLogger(MainActivity::class.java.name).warning("onListeningCanceled")
     }
 
     override fun onListeningFinished() {
 
+        Logger.getLogger(MainActivity::class.java.name).warning("onListeningFinished")
     }
 }
