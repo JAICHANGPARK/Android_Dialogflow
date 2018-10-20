@@ -93,20 +93,24 @@ class MainActivity : AppCompatActivity(), AIListener {
 
 //
 
+        val sessions = UUID.randomUUID()
 
         my_chat_view.setOnClickSendButtonListener(View.OnClickListener {
 
 
             //More code here
+            val msg = my_chat_view.inputText
 
-            if (my_chat_view.inputText.isNotEmpty()) {
+
+            if (msg.isNotEmpty()) {
                 Logger.getLogger(MainActivity::class.java.name).warning(my_chat_view.inputText)
+
                 my_chat_view.send(
                     Message.Builder()
                         .setRight(true)
                         .setUser(this!!.human!!)
                         .hideIcon(true)
-                        .setText(my_chat_view.inputText)
+                        .setText(msg)
                         .build()
                 )
 
@@ -114,9 +118,9 @@ class MainActivity : AppCompatActivity(), AIListener {
                     "https://api.dialogflow.com/v1/query?",
                     listOf(
                         "v" to "20150910",
-                        "sessionId" to UUID.randomUUID(),   // random ID
+                        "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
                         "lang" to "ko",   // English language
-                        "query" to my_chat_view.inputText
+                        "query" to msg
                     )
                 ).header(
                     "Authorization" to "Bearer e161b0496a0e4816ba08215c61ea0845"
@@ -140,6 +144,8 @@ class MainActivity : AppCompatActivity(), AIListener {
                     }.timeout(5000)
 
                 my_chat_view.inputText = ""
+
+
             } else {
                 toast("전송할 메세지를 입력하세요")
             }
