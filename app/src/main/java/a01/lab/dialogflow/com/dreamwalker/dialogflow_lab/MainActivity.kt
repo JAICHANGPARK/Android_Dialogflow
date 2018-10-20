@@ -19,8 +19,8 @@ import com.github.bassaer.chatmessageview.model.ChatUser
 import com.github.bassaer.chatmessageview.model.Message
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
-import com.github.kittinunf.fuel.core.FuelManager
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.toast
 import java.util.*
 import java.util.logging.Logger
 
@@ -78,16 +78,17 @@ class MainActivity : AppCompatActivity(), AIListener {
         )
 
 //
-        FuelManager.instance.baseHeaders = mapOf(
-            "Authorization" to "Bearer e161b0496a0e4816ba08215c61ea0845"
-        )
-
-        FuelManager.instance.basePath = "https://api.dialogflow.com/v1/"
-        FuelManager.instance.baseParams = listOf(
-            "v" to "20150910",                  // latest protocol
-            "sessionId" to UUID.randomUUID(),   // random ID
-            "lang" to "ko"                      // English language
-        )
+//        FuelManager.instance.baseHeaders = mapOf(
+//            "Authorization" to "Bearer e161b0496a0e4816ba08215c61ea0845"
+//        )
+//
+//        FuelManager.instance.basePath = "https://api.dialogflow.com/v1/query?v=20150910"
+//
+//
+//        FuelManager.instance.baseParams = listOf( // latest protocol
+//            "sessionId" to UUID.randomUUID(),   // random ID
+//            "lang" to "ko"                      // English language
+//        )
 //
 
 //
@@ -98,24 +99,49 @@ class MainActivity : AppCompatActivity(), AIListener {
 
             //More code here
 
-            Fuel.get("/query",
-                listOf("query" to my_chat_view.inputText)
-            ).responseJson { _, _, result ->
-                val reply = result.get().obj()
-                    .getJSONObject("result")
-                    .getJSONObject("fulfillment")
-                    .getString("speech")
-                Logger.getLogger(MainActivity::class.java.name).warning(reply)
-
-//             More code here
-
+            if (my_chat_view.inputText.isNotEmpty()) {
+                Logger.getLogger(MainActivity::class.java.name).warning(my_chat_view.inputText)
                 my_chat_view.send(
                     Message.Builder()
                         .setRight(true)
-                        .setUser(agent!!)
-                        .setText(reply)
+                        .setUser(this!!.human!!)
+                        .hideIcon(true)
+                        .setText(my_chat_view.inputText)
                         .build()
                 )
+
+                Fuel.get(
+                    "https://api.dialogflow.com/v1/query?",
+                    listOf(
+                        "v" to "20150910",
+                        "sessionId" to UUID.randomUUID(),   // random ID
+                        "lang" to "ko",   // English language
+                        "query" to my_chat_view.inputText
+                    )
+                ).header(
+                    "Authorization" to "Bearer e161b0496a0e4816ba08215c61ea0845"
+                )
+                    .responseJson { _, _, result ->
+
+                        val reply = result.get().obj()
+                            .getJSONObject("result")
+                            .getJSONObject("fulfillment")
+                            .getString("speech")
+
+                        Logger.getLogger(MainActivity::class.java.name).warning(reply)
+
+                        my_chat_view.send(
+                            Message.Builder()
+                                .hideIcon(true)
+                                .setUser(agent!!)
+                                .setText(reply)
+                                .build()
+                        )
+                    }.timeout(5000)
+
+                my_chat_view.inputText = ""
+            } else {
+                toast("전송할 메세지를 입력하세요")
             }
 
 
