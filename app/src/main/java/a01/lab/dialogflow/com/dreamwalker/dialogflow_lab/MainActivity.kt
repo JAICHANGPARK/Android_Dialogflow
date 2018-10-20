@@ -23,8 +23,6 @@ import java.util.logging.Logger
 
 class MainActivity : AppCompatActivity(), AIListener {
 
-
-
     companion object {
         private const val ACCESS_TOKEN = "0b3c6e3b904648b4972cf6979e2e186f"
     }
