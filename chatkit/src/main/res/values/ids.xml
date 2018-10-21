@@ -10,10 +10,14 @@
 
     <!-- MESSAGE INPUT -->
     <item name="attachmentButton" type="id" />
-    <item name="messageSendButton" type="id" />
+
     <item name="attachmentButtonSpace" type="id" />
     <item name="sendButtonSpace" type="id" />
     <item name="messageInput" type="id" />
+    <item name="messageSendButton" type="id" />
+    <item name="messageMicButton" type="id" />
+    <item name="micButtonSpace" type="id" />
+
 
     <!-- DIALOGS LIST ITEM -->
     <item name="dialogRootLayout" type="id" />

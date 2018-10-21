@@ -45,11 +45,16 @@ public class MessageInput extends RelativeLayout
     protected EditText messageInput;
     protected ImageButton messageSendButton;
     protected ImageButton attachmentButton;
-    protected Space sendButtonSpace, attachmentButtonSpace;
+    protected Space sendButtonSpace, attachmentButtonSpace, micButtonSpace;
+
+    protected ImageButton messageMicButton;
 
     private CharSequence input;
     private InputListener inputListener;
     private AttachmentsListener attachmentsListener;
+
+    private onMicListener micListener;
+
     private boolean isTyping;
     private TypingListener typingListener;
     private int delayTypingStatusMillis;
@@ -98,6 +103,10 @@ public class MessageInput extends RelativeLayout
         this.attachmentsListener = attachmentsListener;
     }
 
+    public void setMicListener(onMicListener onMicListener) {
+        this.micListener = onMicListener;
+    }
+
     /**
      * Returns EditText for messages input
      *
@@ -116,6 +125,10 @@ public class MessageInput extends RelativeLayout
         return messageSendButton;
     }
 
+    public ImageButton getMicButton() {
+        return messageMicButton;
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -128,6 +141,8 @@ public class MessageInput extends RelativeLayout
             post(typingTimerRunnable);
         } else if (id == R.id.attachmentButton) {
             onAddAttachments();
+        } else if (id == R.id.messageMicButton) {
+            onMic();
         }
     }
 
@@ -179,8 +194,18 @@ public class MessageInput extends RelativeLayout
     }
 
     private void onAddAttachments() {
-        if (attachmentsListener != null) attachmentsListener.onAddAttachments();
+        if (attachmentsListener != null) {
+            attachmentsListener.onAddAttachments();
+        }
     }
+
+    private void onMic() {
+        if (micListener != null) {
+            micListener.onVoiceStart();
+        }
+    }
+
+
 
     private void init(Context context, AttributeSet attrs) {
         init(context);
@@ -210,6 +235,16 @@ public class MessageInput extends RelativeLayout
         ViewCompat.setBackground(messageSendButton, style.getInputButtonBackground());
         this.sendButtonSpace.getLayoutParams().width = style.getInputButtonMargin();
 
+
+        this.messageMicButton.setImageDrawable(style.getMicButtonIcon());
+        this.messageMicButton.getLayoutParams().width = style.getInputButtonWidth();
+        this.messageMicButton.getLayoutParams().height = style.getInputButtonHeight();
+        ViewCompat.setBackground(messageMicButton, style.getInputButtonBackground());
+        this.micButtonSpace.getLayoutParams().width = style.getInputButtonMargin();
+
+
+
+
         if (getPaddingLeft() == 0
                 && getPaddingRight() == 0
                 && getPaddingTop() == 0
@@ -231,13 +266,18 @@ public class MessageInput extends RelativeLayout
         messageSendButton = (ImageButton) findViewById(R.id.messageSendButton);
         attachmentButton = (ImageButton) findViewById(R.id.attachmentButton);
         sendButtonSpace = (Space) findViewById(R.id.sendButtonSpace);
+        micButtonSpace = (Space) findViewById(R.id.micButtonSpace);
         attachmentButtonSpace = (Space) findViewById(R.id.attachmentButtonSpace);
+        messageMicButton = (ImageButton) findViewById(R.id.messageMicButton);
 
         messageSendButton.setOnClickListener(this);
         attachmentButton.setOnClickListener(this);
+        messageMicButton.setOnClickListener(this);
+
         messageInput.addTextChangedListener(this);
         messageInput.setText("");
         messageInput.setOnFocusChangeListener(this);
+
     }
 
     private void setCursor(Drawable drawable) {
@@ -309,5 +349,9 @@ public class MessageInput extends RelativeLayout
          */
         void onStopTyping();
 
+    }
+
+    public interface onMicListener{
+        boolean onVoiceStart();
     }
 }

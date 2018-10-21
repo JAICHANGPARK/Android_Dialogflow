@@ -20,7 +20,14 @@ import java.util.logging.Logger
 
 class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageInput.TypingListener,
         MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
-        TextToSpeech.OnInitListener {
+        TextToSpeech.OnInitListener, MessageInput.onMicListener {
+
+
+
+    override fun onVoiceStart(): Boolean {
+
+        return  true
+    }
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
@@ -53,6 +60,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         input.setInputListener(this)
         input.setTypingListener(this)
         input.setAttachmentsListener(this)
+        input.setMicListener(this)
 
         textToSpeech = TextToSpeech(this, this)
         mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -111,7 +119,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
 
     private fun speekResponse(reply: String) {
-        
+
         if (mAudioManager != null) {
             when (mAudioManager!!.ringerMode) {
 

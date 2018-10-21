@@ -227,6 +227,15 @@ class MessageInputStyle extends Style {
         }
     }
 
+    protected Drawable getMicButtonIcon() {
+        if (inputButtonIcon == -1) {
+            return getSelector(inputButtonDefaultIconColor, inputButtonDefaultIconPressedColor,
+                    inputButtonDefaultIconDisabledColor, R.drawable.ic_mic_black_24dp);
+        } else {
+            return getDrawable(inputButtonIcon);
+        }
+    }
+
     protected int getInputButtonMargin() {
         return inputButtonMargin;
     }
