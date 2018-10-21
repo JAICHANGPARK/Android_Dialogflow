@@ -3,6 +3,7 @@ package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Message
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.User
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
@@ -15,13 +16,21 @@ import java.util.*
 import java.util.logging.Logger
 
 class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageInput.TypingListener,
-    MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener {
+    MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
+    TextToSpeech.OnInitListener {
 
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS){
+            textToSpeech?.language = Locale.KOREA
+        }
+    }
 
-    protected val senderId = "0"
     private var messagesList: MessagesList? = null
-    internal var messagesAdapter: MessagesListAdapter<Message>? = null
+    val senderId = "0"
+    var messagesAdapter: MessagesListAdapter<Message>? = null
     val sessions = UUID.randomUUID()
+    var textToSpeech : TextToSpeech? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_v2)
@@ -33,6 +42,9 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         input.setInputListener(this)
         input.setTypingListener(this)
         input.setAttachmentsListener(this)
+
+        textToSpeech = TextToSpeech(this,this)
+
 
     }
 
@@ -80,7 +92,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //                        .setText(reply)
 //                        .build())
                 messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), reply), true)
-
+                textToSpeech?.speak(reply, TextToSpeech.QUEUE_FLUSH,null, null)
             }
         return true
     }
@@ -103,5 +115,13 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
     override fun onLoadMore(page: Int, totalItemsCount: Int) {
 
+    }
+
+    override fun onDestroy() {
+        if (textToSpeech != null){
+            textToSpeech!!.stop()
+            textToSpeech!!.shutdown()
+        }
+        super.onDestroy()
     }
 }
