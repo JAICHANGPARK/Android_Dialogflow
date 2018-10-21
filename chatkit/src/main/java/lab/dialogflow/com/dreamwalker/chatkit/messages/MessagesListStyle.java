@@ -26,8 +26,9 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.AttributeSet;
-import com.stfalcon.chatkit.R;
-import com.stfalcon.chatkit.commons.Style;
+import lab.dialogflow.com.dreamwalker.chatkit.R;
+import lab.dialogflow.com.dreamwalker.chatkit.commons.Style;
+
 
 /**
  * Style for MessagesListStyle customization by xml attributes

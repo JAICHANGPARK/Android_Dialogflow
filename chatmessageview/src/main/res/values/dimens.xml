@@ -28,6 +28,7 @@
 
     <!-- Radius -->
     <dimen name="view_radius_normal">16dp</dimen>
+    <dimen name="message_bubble_corners_radius">15dp</dimen>
 
 
 

@@ -16,27 +16,29 @@
 
 package lab.dialogflow.com.dreamwalker.chatkit.commons.models;
 
-import android.support.annotation.Nullable;
-import lab.dialogflow.com.dreamwalker.chatkit.messages.MessageHolders;
-
-/*
- * Created by troy379 on 28.03.17.
- */
-
 /**
- * Interface used to mark messages as custom content types. For its representation see {@link MessageHolders}
+ * For implementing by real user model
  */
-
-public interface MessageContentType extends IMessage {
+public interface IUser {
 
     /**
-     * Default media type for image message.
-     */
-    interface Image extends IMessage {
-        @Nullable
-        String getImageUrl();
-    }
+     * Returns the user's id
+     *
+     * @return the user's id
+     * */
+    String getId();
 
-    // other default types will be here
+    /**
+     * Returns the user's name
+     *
+     * @return the user's name
+     * */
+    String getName();
 
+    /**
+     * Returns the user's avatar image url
+     *
+     * @return the user's avatar image url
+     * */
+    String getAvatar();
 }

@@ -27,7 +27,8 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import com.stfalcon.chatkit.R;
+import lab.dialogflow.com.dreamwalker.chatkit.R;
+
 
 /**
  * Base class for chat component styles

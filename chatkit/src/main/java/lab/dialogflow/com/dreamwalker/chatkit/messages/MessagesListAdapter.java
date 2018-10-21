@@ -29,11 +29,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.stfalcon.chatkit.R;
-import com.stfalcon.chatkit.commons.ImageLoader;
-import com.stfalcon.chatkit.commons.ViewHolder;
-import com.stfalcon.chatkit.commons.models.IMessage;
-import com.stfalcon.chatkit.utils.DateFormatter;
+import lab.dialogflow.com.dreamwalker.chatkit.R;
+import lab.dialogflow.com.dreamwalker.chatkit.commons.ImageLoader;
+import lab.dialogflow.com.dreamwalker.chatkit.commons.ViewHolder;
+import lab.dialogflow.com.dreamwalker.chatkit.commons.models.IMessage;
+import lab.dialogflow.com.dreamwalker.chatkit.utils.DateFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
