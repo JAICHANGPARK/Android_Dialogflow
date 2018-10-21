@@ -30,9 +30,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import lab.dialogflow.com.dreamwalker.chatkit.R;
 
 import java.lang.reflect.Field;
+
+import lab.dialogflow.com.dreamwalker.chatkit.R;
 
 /**
  * Component for input outcoming messages
@@ -61,6 +62,7 @@ public class MessageInput extends RelativeLayout
             }
         }
     };
+
     private boolean lastFocus;
 
     public MessageInput(Context context) {
