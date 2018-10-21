@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Dialogflow_lab</string>
+    <string name="hint_enter_a_message">Type a message…</string>
 </resources>
