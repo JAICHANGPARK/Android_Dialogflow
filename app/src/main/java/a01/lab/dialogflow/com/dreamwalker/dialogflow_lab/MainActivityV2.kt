@@ -59,7 +59,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         setContentView(R.layout.activity_main_v2)
 
         val config = ai.api.android.AIConfiguration(
-                "e161b0496a0e4816ba08215c61ea0845",
+                "cefd4057d9184356a0416f37f7f372c8",
                 AIConfiguration.SupportedLanguages.Korean,
                 ai.api.android.AIConfiguration.RecognitionEngine.System
         )
@@ -149,7 +149,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                         "query" to input
                 )
         ).header(
-                "Authorization" to "Bearer e161b0496a0e4816ba08215c61ea0845"
+                "Authorization" to "Bearer cefd4057d9184356a0416f37f7f372c8"
         )
                 .responseJson { _, _, result ->
 
@@ -233,12 +233,9 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     }
 
     override fun onListeningStarted() {
-
-
     }
 
     override fun onAudioLevel(level: Float) {
-
     }
 
     override fun onError(error: AIError?) {
@@ -309,10 +306,37 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
                 messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), result), true)
 
-                aiRequest!!.setQuery("result")
-                backgroundTask().execute(aiRequest)
 
+//                aiRequest!!.sessionId = senderId
+//                aiRequest?.language = "ko"
+//                aiRequest!!.setQuery(result)
+//
+//                backgroundTask().execute(aiRequest)
 
+                Fuel.get(
+                        "https://api.dialogflow.com/v1/query?",
+                        listOf(
+                                "v" to "20150910",
+                                "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
+                                "lang" to "ko",   // English language
+                                "query" to result
+                        )
+                ).header(
+                        "Authorization" to "Bearer cefd4057d9184356a0416f37f7f372c8"
+                )
+                        .responseJson { _, _, result ->
+
+                            val reply = result.get().obj()
+                                    .getJSONObject("result")
+                                    .getJSONObject("fulfillment")
+                                    .getString("speech")
+
+                            Logger.getLogger(MainActivity::class.java.name).warning(reply)
+
+                            messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), reply), true)
+                            //todo dialog flow 리턴값 tts 처리
+                            speekResponse(reply)
+                        }
                 dialog.dismiss()
             }
 

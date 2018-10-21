@@ -46,6 +46,7 @@ public class MessageInput extends RelativeLayout
     protected ImageButton messageSendButton;
     protected ImageButton attachmentButton;
     protected Space sendButtonSpace, attachmentButtonSpace;
+//    protected Space micButtonSpace;
 
     protected ImageButton messageMicButton;
 
