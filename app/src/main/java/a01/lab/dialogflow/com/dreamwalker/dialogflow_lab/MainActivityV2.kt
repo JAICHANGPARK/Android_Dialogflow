@@ -19,14 +19,21 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessageInput
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessagesList
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessagesListAdapter
+import net.gotev.speech.Speech
+import net.gotev.speech.SpeechDelegate
+import net.gotev.speech.SpeechRecognitionNotAvailable
+import net.gotev.speech.ui.SpeechProgressView
 import org.jetbrains.anko.toast
 import java.util.*
 import java.util.logging.Logger
@@ -68,7 +75,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         aiService?.setListener(this)
 
         aiRequest = AIRequest()
-        aiRequest!!.setQuery("Hello")
+//        aiRequest!!.setQuery("Hello")
 
         messagesList = findViewById<View>(R.id.messagesList) as MessagesList
         initAdapter()
@@ -83,7 +90,9 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
 
-        backgroundTask().execute(aiRequest)
+        Speech.init(this, getPackageName())
+
+//        backgroundTask().execute(aiRequest)
     }
 
     inner class backgroundTask : AsyncTask<AIRequest, Void, AIResponse>() {
@@ -93,15 +102,16 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             try {
                 val response = aiDataService!!.request(aiRequest)
                 return response
-            } catch (e: AIServiceException){
+            } catch (e: AIServiceException) {
                 toast(e.message.toString())
             }
             return null
         }
 
         override fun onPostExecute(result: AIResponse?) {
-            if (result != null){
-                toast(result.result.fulfillment.speech)
+            if (result != null) {
+//                toast(result.result.fulfillment.speech)
+                messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), result.result.fulfillment.speech), true)
             }
             super.onPostExecute(result)
         }
@@ -248,7 +258,74 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
     override fun onVoiceStart(): Boolean {
         toast("onMic Button Clicked")
-        aiService!!.startListening()
+//        aiService!!.startListening()
+
+        val colors = intArrayOf(ContextCompat.getColor(this, R.color.color1),
+                ContextCompat.getColor(this, R.color.color2),
+                ContextCompat.getColor(this, R.color.color3),
+                ContextCompat.getColor(this, R.color.color4),
+                ContextCompat.getColor(this, R.color.color5))
+
+        val heights = intArrayOf(60, 76, 58, 80, 55)
+
+
+        val builder = AlertDialog.Builder(this)
+
+        val view = layoutInflater.inflate(R.layout.dialog_sst_main, null)
+        builder.setTitle("말하세요")
+        builder.setView(view)
+        val speechProgressView = view.findViewById(R.id.recognition_view) as SpeechProgressView
+        val partialTextView = view.findViewById(R.id.partial_text_view) as TextView
+        speechProgressView.setColors(colors)
+        speechProgressView.setBarMaxHeightsInDp(heights)
+        val dialog = builder.create()
+        val delegate = object : SpeechDelegate{
+            override fun onStartOfSpeech() {
+                toast("이야기해주세요")
+            }
+
+            override fun onSpeechPartialResults(results: MutableList<String>?) {
+                val str = StringBuilder()
+                if (results != null) {
+                    for (res in results) {
+                        str.append(res).append(" ")
+                    }
+                }
+                Log.i("speech", "partial result: " + str.toString().trim { it <= ' ' })
+
+                runOnUiThread {
+                    partialTextView.text = str.toString()
+                }
+
+            }
+
+            override fun onSpeechRmsChanged(value: Float) {
+
+            }
+
+            override fun onSpeechResult(result: String?) {
+                toast("Result -->" + result)
+                Log.i("speech", "result: " + result)
+
+                messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), result), true)
+
+                aiRequest!!.setQuery("result")
+                backgroundTask().execute(aiRequest)
+
+
+                dialog.dismiss()
+            }
+
+        }
+        try {
+            Speech.getInstance().startListening(speechProgressView,delegate)
+        } catch (e: SpeechRecognitionNotAvailable) {
+
+        }
+//        builder.show()
+        dialog.show()
+
+
         return true
     }
 
@@ -270,6 +347,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             textToSpeech!!.stop()
             textToSpeech!!.shutdown()
         }
+        Speech.getInstance().shutdown();
         super.onDestroy()
     }
 
