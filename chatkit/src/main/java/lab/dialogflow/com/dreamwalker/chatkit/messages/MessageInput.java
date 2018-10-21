@@ -45,7 +45,7 @@ public class MessageInput extends RelativeLayout
     protected EditText messageInput;
     protected ImageButton messageSendButton;
     protected ImageButton attachmentButton;
-    protected Space sendButtonSpace, attachmentButtonSpace, micButtonSpace;
+    protected Space sendButtonSpace, attachmentButtonSpace;
 
     protected ImageButton messageMicButton;
 
@@ -240,7 +240,7 @@ public class MessageInput extends RelativeLayout
         this.messageMicButton.getLayoutParams().width = style.getInputButtonWidth();
         this.messageMicButton.getLayoutParams().height = style.getInputButtonHeight();
         ViewCompat.setBackground(messageMicButton, style.getInputButtonBackground());
-        this.micButtonSpace.getLayoutParams().width = style.getInputButtonMargin();
+//        this.micButtonSpace.getLayoutParams().width = style.getInputButtonMargin();
 
 
 
@@ -266,7 +266,7 @@ public class MessageInput extends RelativeLayout
         messageSendButton = (ImageButton) findViewById(R.id.messageSendButton);
         attachmentButton = (ImageButton) findViewById(R.id.attachmentButton);
         sendButtonSpace = (Space) findViewById(R.id.sendButtonSpace);
-        micButtonSpace = (Space) findViewById(R.id.micButtonSpace);
+//        micButtonSpace = (Space) findViewById(R.id.micButtonSpace);
         attachmentButtonSpace = (Space) findViewById(R.id.attachmentButtonSpace);
         messageMicButton = (ImageButton) findViewById(R.id.messageMicButton);
 
