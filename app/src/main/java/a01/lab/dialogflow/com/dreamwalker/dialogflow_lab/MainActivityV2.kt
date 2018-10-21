@@ -2,10 +2,23 @@ package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Message
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.User
+import ai.api.AIConfiguration
+import ai.api.AIDataService
+import ai.api.AIListener
+import ai.api.AIServiceException
+import ai.api.android.AIService
+import ai.api.model.AIError
+import ai.api.model.AIRequest
+import ai.api.model.AIResponse
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.os.AsyncTask
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
@@ -20,27 +33,8 @@ import java.util.logging.Logger
 
 class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageInput.TypingListener,
         MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
-        TextToSpeech.OnInitListener, MessageInput.onMicListener {
+        TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener {
 
-
-
-    override fun onVoiceStart(): Boolean {
-
-        return  true
-    }
-
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            textToSpeech?.language = Locale.KOREA
-            val language = textToSpeech?.setLanguage(Locale.KOREAN)
-
-            if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED) {
-                toast("지원하지 않는 언어입니다.")
-            }
-        } else {
-            toast("TTS 실패!")
-        }
-    }
 
     private var messagesList: MessagesList? = null
     val senderId = "0"
@@ -49,9 +43,32 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     var textToSpeech: TextToSpeech? = null
     var mAudioManager: AudioManager? = null
 
+    var aiService: AIService? = null
+    var aiDataService: AIDataService? = null
+    var aiRequest: AIRequest? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_v2)
+
+        val config = ai.api.android.AIConfiguration(
+                "e161b0496a0e4816ba08215c61ea0845",
+                AIConfiguration.SupportedLanguages.Korean,
+                ai.api.android.AIConfiguration.RecognitionEngine.System
+        )
+
+        aiService = AIService.getService(this, config)
+        aiDataService = AIDataService(config)
+
+        val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            makeRequest()
+        }
+
+        aiService?.setListener(this)
+
+        aiRequest = AIRequest()
+        aiRequest!!.setQuery("Hello")
 
         messagesList = findViewById<View>(R.id.messagesList) as MessagesList
         initAdapter()
@@ -64,6 +81,36 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
         textToSpeech = TextToSpeech(this, this)
         mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+
+        backgroundTask().execute(aiRequest)
+    }
+
+    inner class backgroundTask : AsyncTask<AIRequest, Void, AIResponse>() {
+
+        override fun doInBackground(vararg params: AIRequest?): AIResponse? {
+            val request = params[0]
+            try {
+                val response = aiDataService!!.request(aiRequest)
+                return response
+            } catch (e: AIServiceException){
+                toast(e.message.toString())
+            }
+            return null
+        }
+
+        override fun onPostExecute(result: AIResponse?) {
+            if (result != null){
+                toast(result.result.fulfillment.speech)
+            }
+            super.onPostExecute(result)
+        }
+
+
+    }
+
+    private fun makeRequest() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 101)
     }
 
     private fun initAdapter() {
@@ -160,6 +207,64 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
     }
 
+
+    override fun onResult(result: AIResponse?) {
+
+        Logger.getLogger(MainActivity::class.java.name).warning(result.toString())
+        val tmpResult = result?.result
+
+        if (tmpResult != null) {
+            Logger.getLogger(MainActivity::class.java.name).warning(tmpResult.action + tmpResult.resolvedQuery + tmpResult.fulfillment)
+            Logger.getLogger(MainActivity::class.java.name).warning(tmpResult.fulfillment.source + tmpResult.fulfillment.speech)
+            messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), tmpResult.resolvedQuery), true)
+            messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), tmpResult.fulfillment.speech), true)
+        }
+
+    }
+
+    override fun onListeningStarted() {
+
+
+    }
+
+    override fun onAudioLevel(level: Float) {
+
+    }
+
+    override fun onError(error: AIError?) {
+        if (error != null) {
+            toast(error.message)
+        }
+    }
+
+    override fun onListeningCanceled() {
+
+    }
+
+    override fun onListeningFinished() {
+
+    }
+
+
+    override fun onVoiceStart(): Boolean {
+        toast("onMic Button Clicked")
+        aiService!!.startListening()
+        return true
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            textToSpeech?.language = Locale.KOREA
+            val language = textToSpeech?.setLanguage(Locale.KOREAN)
+
+            if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED) {
+                toast("지원하지 않는 언어입니다.")
+            }
+        } else {
+            toast("TTS 실패!")
+        }
+    }
+
     override fun onDestroy() {
         if (textToSpeech != null) {
             textToSpeech!!.stop()
@@ -167,5 +272,6 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
         super.onDestroy()
     }
+
 
 }

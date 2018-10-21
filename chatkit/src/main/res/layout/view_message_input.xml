@@ -34,6 +34,7 @@
         android:layout_toStartOf="@id/messageSendButton"
         android:layout_toLeftOf="@id/messageSendButton" />
 
+
     <ImageButton
         android:id="@id/messageSendButton"
         android:layout_width="wrap_content"
@@ -41,11 +42,6 @@
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/messageMicButton" />
 
-
-    <android.support.v4.widget.Space
-        android:layout_width="16dp"
-        android:layout_height="0dp"
-        android:layout_toEndOf="@id/messageSendButton" />
 
     <ImageButton
         android:id="@id/messageMicButton"

@@ -40,21 +40,17 @@ class MainActivity : AppCompatActivity(), AIListener {
         setContentView(R.layout.activity_main)
 
         val config = AIConfiguration(
-            "e161b0496a0e4816ba08215c61ea0845",
-            SupportedLanguages.Korean,
-            RecognitionEngine.System
+                "e161b0496a0e4816ba08215c61ea0845",
+                SupportedLanguages.Korean,
+                RecognitionEngine.System
         )
 
         val aiService = AIService.getService(this, config)
         aiService.setListener(this)
 
-
-        val permission = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.RECORD_AUDIO
-        )
+        val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
-
             makeRequest()
         }
 
