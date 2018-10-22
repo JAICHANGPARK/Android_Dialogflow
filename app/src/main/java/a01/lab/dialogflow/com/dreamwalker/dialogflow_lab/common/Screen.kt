@@ -27,5 +27,11 @@ abstract class Screen : Fragment {
         onInitView(view)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+    }
+
     abstract fun onInitView(view: View)
+
+
 }

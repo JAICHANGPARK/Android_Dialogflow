@@ -9,11 +9,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/normal_gap"
-        android:layout_marginTop="@dimen/normal_gap"
         android:layout_marginEnd="@dimen/normal_gap"
         android:text="@string/items_gallery"
         android:textAllCaps="true"
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/calendarView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,23 +31,24 @@
         app:layout_constraintTop_toBottomOf="@id/screenTitle" />
 
     <devs.mulham.horizontalcalendar.HorizontalCalendarView
+
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:backgroundTint="@color/colorPrimary"
+        android:background="@color/white"
+        android:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
         app:sizeBottomText="14sp"
         app:sizeMiddleText="20sp"
-        app:textColorSelected="#FFFF" />
+        app:textColorSelected="#FFFF"
+        tools:layout_editor_absoluteY="62dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
