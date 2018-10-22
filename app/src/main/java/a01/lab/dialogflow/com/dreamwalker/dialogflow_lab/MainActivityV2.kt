@@ -1,5 +1,6 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Message
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.User
 import ai.api.AIConfiguration
@@ -12,6 +13,7 @@ import ai.api.model.AIRequest
 import ai.api.model.AIResponse
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.AsyncTask
@@ -27,6 +29,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessageInput
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessagesList
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessagesListAdapter
@@ -35,6 +39,7 @@ import net.gotev.speech.SpeechDelegate
 import net.gotev.speech.SpeechRecognitionNotAvailable
 import net.gotev.speech.ui.SpeechProgressView
 import org.jetbrains.anko.toast
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.logging.Logger
 
@@ -54,9 +59,15 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     var aiDataService: AIDataService? = null
     var aiRequest: AIRequest? = null
     val keys = "aad99a0d97f64a0bbe5b7328ec6a1d22"
+    var realm: Realm? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_v2)
+        Realm.init(this)
+
+        val realmConfig = RealmConfiguration.Builder().name("glucose.realm").build()
+        realm = Realm.getInstance(realmConfig)
 
         val config = ai.api.android.AIConfiguration(
             keys,
@@ -89,41 +100,12 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         textToSpeech = TextToSpeech(this, this)
         mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-
         Speech.init(this, getPackageName())
 
 //        backgroundTask().execute(aiRequest)
     }
 
-    inner class backgroundTask : AsyncTask<AIRequest, Void, AIResponse>() {
 
-        override fun doInBackground(vararg params: AIRequest?): AIResponse? {
-            val request = params[0]
-            try {
-                val response = aiDataService!!.request(aiRequest)
-                return response
-            } catch (e: AIServiceException) {
-                toast(e.message.toString())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: AIResponse?) {
-            if (result != null) {
-//                toast(result.result.fulfillment.speech)
-                messagesAdapter?.addToStart(
-                    Message(
-                        "1",
-                        User("1", "agent", "1", true),
-                        result.result.fulfillment.speech
-                    ), true
-                )
-            }
-            super.onPostExecute(result)
-        }
-
-
-    }
 
     private fun makeRequest() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 101)
@@ -362,12 +344,40 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                                     val timeOriginal = parameters.getString("time.original")
                                     val numberIntegerByglucose = parameters.getString("number-integer")
                                     val detailType = parameters.getString("DetailTypes")
+                                    val tms = parameters.getString("time")
 
                                     Logger.getLogger(MainActivity::class.java.name).warning(
                                         "$writeType|$dateTime|$dateTimeOriginal|" +
                                                 "$userTypeTime|$userTypeTimeOriginal|$timeOriginal" +
                                                 "|$numberIntegerByglucose|$detailType|"
                                     )
+
+//                                    String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                                    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA)
+                                    val outputFormat = SimpleDateFormat("yyyy-MM-dd",Locale.KOREA)
+                                    val outputTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.KOREA)
+                                    val outputDateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+                                    val date = inputFormat.parse(dateTime) //2018-04-10T04:00:00.000Z
+                                    val formattedDate = outputFormat.format(date)
+                                    val formattedTime = outputTimeFormat.format(date)
+                                    val formattedDateTime = outputDateTimeFormat.format(date)
+                                    println(formattedDate) // prints 10-04-2018
+
+
+                                    realm?.executeTransaction{
+                                        val gluco = realm!!.createObject(Glucose::class.java)
+                                        gluco.date = date
+                                        gluco.rawDate = formattedDate
+                                        gluco.rawTime = formattedTime
+                                        gluco.datetime = formattedDateTime
+                                        gluco.userGlucoValue = numberIntegerByglucose.toFloat()
+                                        gluco.userTypeTime = userTypeTime // 아침 점심 저녁
+                                        gluco.userType = detailType // 운동
+                                        gluco.userDetailTime = tms
+                                    }
+
+                                    val intent = Intent(applicationContext, HomeActivity::class.java)
+                                    startActivity(intent)
 
                                 }
 
@@ -394,11 +404,15 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                             //todo dialog flow 리턴값 tts 처리
                             speekResponse(reply)
                         }
+
                 } else {
                     toast("공백은 전송할 수 없습니다.")
                 }
 
                 dialog.dismiss()
+
+
+
             }
 
         }
@@ -425,6 +439,37 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         } else {
             toast("TTS 실패!")
         }
+    }
+
+
+    inner class backgroundTask : AsyncTask<AIRequest, Void, AIResponse>() {
+
+        override fun doInBackground(vararg params: AIRequest?): AIResponse? {
+            val request = params[0]
+            try {
+                val response = aiDataService!!.request(aiRequest)
+                return response
+            } catch (e: AIServiceException) {
+                toast(e.message.toString())
+            }
+            return null
+        }
+
+        override fun onPostExecute(result: AIResponse?) {
+            if (result != null) {
+//                toast(result.result.fulfillment.speech)
+                messagesAdapter?.addToStart(
+                    Message(
+                        "1",
+                        User("1", "agent", "1", true),
+                        result.result.fulfillment.speech
+                    ), true
+                )
+            }
+            super.onPostExecute(result)
+        }
+
+
     }
 
     override fun onDestroy() {
