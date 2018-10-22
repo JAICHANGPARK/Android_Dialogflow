@@ -1,1 +1,1 @@
-include ':app', ':chatmessageview', ':chatkit', ':roundcornerprogressbar'
+include ':app', ':chatmessageview', ':chatkit', ':roundcornerprogressbar', ':backdrop'

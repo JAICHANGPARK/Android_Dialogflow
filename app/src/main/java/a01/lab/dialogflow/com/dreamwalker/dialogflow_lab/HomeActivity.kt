@@ -24,7 +24,5 @@ class HomeActivity : AppCompatActivity() {
             glucose: Glucose? ->
             Logger.getLogger(this::class.java.name).warning(glucose?.userGlucoValue.toString())
         }
-
-
     }
 }
