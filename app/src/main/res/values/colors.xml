@@ -4,8 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-
-
     <color name="cornflower_blue">#6274e2</color>
     <color name="cornflower_blue_dark">#303F9F</color>
     <color name="cornflower_blue_darkest">#2d3a93</color>
@@ -44,7 +42,9 @@
     <color name="white_translucent_38">#61ffffff</color>
     <color name="white_translucent_12">#1Fffffff</color>
 
+
     <!-- Elements -->
     <color name="divider">@color/black_translucent_12</color>
+
 
 </resources>

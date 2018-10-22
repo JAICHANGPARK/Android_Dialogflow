@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import io.paperdb.Paper
 import kotlinx.android.synthetic.main.activity_home.*
 import lab.dialogflow.com.dreamwalker.backdrop.BackdropBehavior
 
@@ -31,6 +32,8 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        Paper.init(this)
 
 
         backdropBehavior = foregroundContainer.findBehavior()
@@ -60,6 +63,11 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivityV2::class.java)
             startActivity(intent)
         }
+
+        if (Paper.book().read("userExp")){
+
+        }
+        user_exp_progressbar.progress = 5.0f
 
     }
 

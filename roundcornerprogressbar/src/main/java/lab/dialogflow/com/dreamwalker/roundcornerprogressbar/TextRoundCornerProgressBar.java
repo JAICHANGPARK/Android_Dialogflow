@@ -34,7 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.akexorcist.roundcornerprogressbar.common.BaseRoundCornerProgressBar;
+import lab.dialogflow.com.dreamwalker.roundcornerprogressbar.common.BaseRoundCornerProgressBar;
 
 /**
  * Created by Akexorcist on 9/16/15 AD.
