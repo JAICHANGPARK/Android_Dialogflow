@@ -123,6 +123,8 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             //                                false);
         }
         this.messagesList!!.setAdapter(messagesAdapter)
+
+        messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), "안녕하세요 :)"), true)
     }
 
     override fun onSubmit(input: CharSequence): Boolean {
@@ -377,7 +379,9 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                                     }
 
                                     val intent = Intent(applicationContext, HomeActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     startActivity(intent)
+                                    finish()
 
                                 }
 
