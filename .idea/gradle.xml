@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/chatkit" />
             <option value="$PROJECT_DIR$/chatmessageview" />
+            <option value="$PROJECT_DIR$/roundcornerprogressbar" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

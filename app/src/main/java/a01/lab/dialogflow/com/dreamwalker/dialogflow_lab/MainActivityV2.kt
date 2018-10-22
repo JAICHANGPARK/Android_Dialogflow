@@ -39,8 +39,8 @@ import java.util.*
 import java.util.logging.Logger
 
 class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageInput.TypingListener,
-        MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
-        TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener {
+    MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
+    TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener {
 
 
     private var messagesList: MessagesList? = null
@@ -53,15 +53,15 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     var aiService: AIService? = null
     var aiDataService: AIDataService? = null
     var aiRequest: AIRequest? = null
-
+    val keys = "aad99a0d97f64a0bbe5b7328ec6a1d22"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_v2)
 
         val config = ai.api.android.AIConfiguration(
-                "cefd4057d9184356a0416f37f7f372c8",
-                AIConfiguration.SupportedLanguages.Korean,
-                ai.api.android.AIConfiguration.RecognitionEngine.System
+            keys,
+            AIConfiguration.SupportedLanguages.Korean,
+            ai.api.android.AIConfiguration.RecognitionEngine.System
         )
 
         aiService = AIService.getService(this, config)
@@ -111,7 +111,13 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         override fun onPostExecute(result: AIResponse?) {
             if (result != null) {
 //                toast(result.result.fulfillment.speech)
-                messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), result.result.fulfillment.speech), true)
+                messagesAdapter?.addToStart(
+                    Message(
+                        "1",
+                        User("1", "agent", "1", true),
+                        result.result.fulfillment.speech
+                    ), true
+                )
             }
             super.onPostExecute(result)
         }
@@ -128,7 +134,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         messagesAdapter?.enableSelectionMode(this)
         messagesAdapter?.setLoadMoreListener(this)
         messagesAdapter?.registerViewClickListener(
-                R.id.messageUserAvatar
+            R.id.messageUserAvatar
         ) { view, message ->
             //                        AppUtils.showToast(DefaultMessagesActivity.this,
             //                                message.getUser().getName() + " avatar click",
@@ -141,24 +147,24 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         Toast.makeText(this, "" + input, Toast.LENGTH_SHORT).show()
         messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), input.toString()), true)
         Fuel.get(
-                "https://api.dialogflow.com/v1/query?",
-                listOf(
-                        "v" to "20150910",
-                        "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
-                        "lang" to "ko",   // English language
-                        "query" to input
-                )
+            "https://api.dialogflow.com/v1/query?",
+            listOf(
+                "v" to "20150910",
+                "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
+                "lang" to "ko",   // English language
+                "query" to input
+            )
         ).header(
-                "Authorization" to "Bearer cefd4057d9184356a0416f37f7f372c8"
+            "Authorization" to "Bearer $keys"
         )
-                .responseJson { _, _, result ->
+            .responseJson { _, _, result ->
 
-                    val reply = result.get().obj()
-                            .getJSONObject("result")
-                            .getJSONObject("fulfillment")
-                            .getString("speech")
+                val reply = result.get().obj()
+                    .getJSONObject("result")
+                    .getJSONObject("fulfillment")
+                    .getString("speech")
 
-                    Logger.getLogger(MainActivity::class.java.name).warning(reply)
+                Logger.getLogger(MainActivity::class.java.name).warning(reply)
 
 //                my_chat_view.send(
 //                    com.github.bassaer.chatmessageview.model.Message.Builder()
@@ -166,10 +172,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //                        .setUser(agent!!)
 //                        .setText(reply)
 //                        .build())
-                    messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), reply), true)
-                    //todo dialog flow 리턴값 tts 처리
-                    speekResponse(reply)
-                }
+                messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), reply), true)
+                //todo dialog flow 리턴값 tts 처리
+                speekResponse(reply)
+            }
 
         return true
     }
@@ -224,8 +230,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         val tmpResult = result?.result
 
         if (tmpResult != null) {
-            Logger.getLogger(MainActivity::class.java.name).warning(tmpResult.action + tmpResult.resolvedQuery + tmpResult.fulfillment)
-            Logger.getLogger(MainActivity::class.java.name).warning(tmpResult.fulfillment.source + tmpResult.fulfillment.speech)
+            Logger.getLogger(MainActivity::class.java.name)
+                .warning(tmpResult.action + tmpResult.resolvedQuery + tmpResult.fulfillment)
+            Logger.getLogger(MainActivity::class.java.name)
+                .warning(tmpResult.fulfillment.source + tmpResult.fulfillment.speech)
             messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), tmpResult.resolvedQuery), true)
             messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), tmpResult.fulfillment.speech), true)
         }
@@ -257,11 +265,13 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         toast("onMic Button Clicked")
 //        aiService!!.startListening()
 
-        val colors = intArrayOf(ContextCompat.getColor(this, R.color.color1),
-                ContextCompat.getColor(this, R.color.color2),
-                ContextCompat.getColor(this, R.color.color3),
-                ContextCompat.getColor(this, R.color.color4),
-                ContextCompat.getColor(this, R.color.color5))
+        val colors = intArrayOf(
+            ContextCompat.getColor(this, R.color.color1),
+            ContextCompat.getColor(this, R.color.color2),
+            ContextCompat.getColor(this, R.color.color3),
+            ContextCompat.getColor(this, R.color.color4),
+            ContextCompat.getColor(this, R.color.color5)
+        )
 
         val heights = intArrayOf(60, 76, 58, 80, 55)
 
@@ -276,7 +286,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         speechProgressView.setColors(colors)
         speechProgressView.setBarMaxHeightsInDp(heights)
         val dialog = builder.create()
-        val delegate = object : SpeechDelegate{
+        val delegate = object : SpeechDelegate {
             override fun onStartOfSpeech() {
                 toast("이야기해주세요")
             }
@@ -301,10 +311,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             }
 
             override fun onSpeechResult(result: String?) {
-                toast("Result -->" + result)
-                Log.i("speech", "result: " + result)
-
-                messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), result), true)
+//                toast("Result -->" + result)
+//                Log.i("speech", "result: " + result)
+                if (result != null && result.isNotEmpty()) {
+                    messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), result), true)
 
 
 //                aiRequest!!.sessionId = senderId
@@ -313,23 +323,23 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //
 //                backgroundTask().execute(aiRequest)
 
-                Fuel.get(
+                    Fuel.get(
                         "https://api.dialogflow.com/v1/query?",
                         listOf(
-                                "v" to "20150910",
-                                "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
-                                "lang" to "ko",   // English language
-                                "query" to result
+                            "v" to "20150910",
+                            "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
+                            "lang" to "ko",   // English language
+                            "query" to result
                         )
-                ).header(
-                        "Authorization" to "Bearer cefd4057d9184356a0416f37f7f372c8"
-                )
+                    ).header(
+                        "Authorization" to "Bearer $keys"
+                    )
                         .responseJson { _, _, result ->
 
                             val reply = result.get().obj()
-                                    .getJSONObject("result")
-                                    .getJSONObject("fulfillment")
-                                    .getString("speech")
+                                .getJSONObject("result")
+                                .getJSONObject("fulfillment")
+                                .getString("speech")
 
                             Logger.getLogger(MainActivity::class.java.name).warning(reply)
 
@@ -337,12 +347,16 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                             //todo dialog flow 리턴값 tts 처리
                             speekResponse(reply)
                         }
+                } else {
+                    toast("공백은 전송할 수 없습니다.")
+                }
+
                 dialog.dismiss()
             }
 
         }
         try {
-            Speech.getInstance().startListening(speechProgressView,delegate)
+            Speech.getInstance().startListening(speechProgressView, delegate)
         } catch (e: SpeechRecognitionNotAvailable) {
 
         }
