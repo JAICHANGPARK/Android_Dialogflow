@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Dialogflow_lab</string>
     <string name="hint_enter_a_message">Type a message…</string>
+
+    <string name="items_list">Screen list</string>
+    <string name="items_gallery">Screen gallery</string>
+    <string name="screen_text">Screen text</string>
+
 </resources>
