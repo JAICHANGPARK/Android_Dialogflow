@@ -286,6 +286,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         speechProgressView.setColors(colors)
         speechProgressView.setBarMaxHeightsInDp(heights)
         val dialog = builder.create()
+
         val delegate = object : SpeechDelegate {
             override fun onStartOfSpeech() {
                 toast("이야기해주세요")
@@ -331,20 +332,56 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                             "lang" to "ko",   // English language
                             "query" to result
                         )
-                    ).header(
-                        "Authorization" to "Bearer $keys"
-                    )
+                    ).header("Authorization" to "Bearer $keys")
                         .responseJson { _, _, result ->
 
-                            Logger.getLogger(MainActivity::class.java.name).warning(
-                                result
+                            if (result.get().obj().getJSONObject("result").getJSONArray("contexts").length() != 0) {
+                                val responseName = result
                                     .get()
                                     .obj()
                                     .getJSONObject("result")
                                     .getJSONArray("contexts")
                                     .getJSONObject(0)
                                     .getString("name")
-                            )
+
+                                val parameters = result
+                                    .get()
+                                    .obj()
+                                    .getJSONObject("result")
+                                    .getJSONArray("contexts")
+                                    .getJSONObject(0)
+                                    .getJSONObject("parameters")
+
+                                if (responseName.equals("writeuserrequest-yes-datain-followup")) {
+
+                                    val writeType = parameters.getString("WriteType")
+                                    val dateTime = parameters.getString("date-time")
+                                    val dateTimeOriginal = parameters.getString("date-time.original")
+                                    val userTypeTime = parameters.getString("UserTypeTime")
+                                    val userTypeTimeOriginal = parameters.getString("UserTypeTime.original")
+                                    val timeOriginal = parameters.getString("time.original")
+                                    val numberIntegerByglucose = parameters.getString("number-integer")
+                                    val detailType = parameters.getString("DetailTypes")
+
+                                    Logger.getLogger(MainActivity::class.java.name).warning(
+                                        "$writeType|$dateTime|$dateTimeOriginal|" +
+                                                "$userTypeTime|$userTypeTimeOriginal|$timeOriginal" +
+                                                "|$numberIntegerByglucose|$detailType|"
+                                    )
+
+                                }
+
+                                Logger.getLogger(MainActivity::class.java.name).warning(
+                                    result
+                                        .get()
+                                        .obj()
+                                        .getJSONObject("result")
+                                        .getJSONArray("contexts")
+                                        .getJSONObject(0)
+                                        .getString("name")
+                                )
+                            }
+
 
                             val reply = result.get().obj()
                                 .getJSONObject("result")
@@ -365,6 +402,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             }
 
         }
+
         try {
             Speech.getInstance().startListening(speechProgressView, delegate)
         } catch (e: SpeechRecognitionNotAvailable) {
@@ -372,7 +410,6 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
 //        builder.show()
         dialog.show()
-
 
         return true
     }
