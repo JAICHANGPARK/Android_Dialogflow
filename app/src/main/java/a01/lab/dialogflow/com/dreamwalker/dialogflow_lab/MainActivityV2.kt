@@ -336,6 +336,16 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                     )
                         .responseJson { _, _, result ->
 
+                            Logger.getLogger(MainActivity::class.java.name).warning(
+                                result
+                                    .get()
+                                    .obj()
+                                    .getJSONObject("result")
+                                    .getJSONArray("contexts")
+                                    .getJSONObject(0)
+                                    .getString("name")
+                            )
+
                             val reply = result.get().obj()
                                 .getJSONObject("result")
                                 .getJSONObject("fulfillment")
