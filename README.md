@@ -1,9 +1,14 @@
 # Android_Dialogflow
-kotlin
+
+
+-  당뇨병 환자를 위한 피트니스 모바일 애플리케이션
+-  연구용 파일럿 프로젝트 
+-  Lang : kotlin, Java
+
+<img src="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/app_source/icons/playstore/icon.png" width="200">
 
 ## Using AI NLP Chat Api
 1. [dialogflow](https://dialogflow.com/)
-
 
 
 
@@ -16,9 +21,14 @@ kotlin
 <td style="text-align: center">
 <img  src ="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/screenshot/device-2018-10-23-152910.png" width ="200">
 </td>
+  <td style="text-align: center">
+<img  src ="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/screenshot/device-2018-10-23-233923.png" width ="200">
+</td>
 <td style="text-align: center">
 <img  src ="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/screenshot/device-2018-10-23-224727.png" width ="200">
 </td>
+
+  
 
 </tr>
 </table>
