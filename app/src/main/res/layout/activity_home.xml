@@ -29,24 +29,26 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <TextView
-                    android:layout_weight="1"
+                    android:id="@+id/user_level_text_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:lineSpacingExtra="4dp"
                     android:text="당뇨 초보자"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <TextView
-                    android:layout_weight="1"
+                    android:id="@+id/user_exp_text_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:lineSpacingExtra="4dp"
                     android:text="경험치"
                     android:textColor="@color/white"

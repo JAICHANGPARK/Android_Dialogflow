@@ -1,5 +1,6 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.util.LevelDesign
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -21,13 +22,15 @@ class HomeActivity : AppCompatActivity() {
 
         private const val MENU_GALLERY = R.id.menuGallery
         private const val MENU_TEXT = R.id.menuText
-        private const val MENU_LIST = R.id.menuList
+//        private const val MENU_LIST = R.id.menuList
 
         private const val FRAGMENT_CONTAINER = R.id.foregroundContainer
 
         private const val DEFAULT_ITEM = MENU_GALLERY
     }
 
+    var userExp: Int = 0
+    var userLevel: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,10 +67,33 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        if (Paper.book().read("userExp")){
+
+//        user_exp_progressbar.progress = 5.0f
+
+        val levelList = LevelDesign.getLevelAndExp()
+        levelList.forEach { i ->
+            println("Out: array 사이즈는 ${levelList.size} 요청한 x = ${i.level}")
+//            Logger.getLogger(this::class.java.name).warning(i.level.toString())
+        }
+        if (Paper.book("user").read<Int>("exp") == null) {
+            Paper.book("user").write("exp", 0)
+            Paper.book("user").write("level", 1)
+            userExp = 0
+            userLevel = 1
+            user_exp_progressbar.progress = userExp.toFloat()
+            user_level_text_view.text = LevelDesign.getUserLevelText(userLevel)
+            val needExp = LevelDesign.getNeedsExp(userLevel)
+            user_exp_text_view.text = "$userExp / $needExp"
+
+        } else {
+            userExp = Paper.book("user").read<Int>("exp")
+            userLevel = Paper.book("user").read<Int>("level")
+            user_exp_progressbar.progress = userExp.toFloat()
+            user_level_text_view.text = LevelDesign.getUserLevelText(userLevel)
+            val needExp = LevelDesign.getNeedsExp(userLevel)
+            user_exp_text_view.text = "$userExp / $needExp"
 
         }
-        user_exp_progressbar.progress = 5.0f
 
     }
 
@@ -105,7 +131,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.home -> {
 
                 return true
@@ -115,8 +141,6 @@ class HomeActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
-
 
 
 }
