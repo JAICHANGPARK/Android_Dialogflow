@@ -10,7 +10,25 @@
         android:id="@+id/messagesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/input_msg" />
+        android:layout_above="@+id/recycler_view" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/recycler_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/gray_light" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/input_msg"
+        android:layout_margin="8dp">
+
+    </android.support.v7.widget.RecyclerView>
 
     <View
         android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.ChatRecommendAdapter
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.ItemClickLitsner
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Message
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.User
@@ -23,6 +25,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -32,6 +35,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import io.paperdb.Paper
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.android.synthetic.main.activity_main_v2.*
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessageInput
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessagesList
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessagesListAdapter
@@ -43,10 +47,12 @@ import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.logging.Logger
+import kotlin.collections.ArrayList
 
 class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageInput.TypingListener,
         MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
-        TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener {
+        TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener, ItemClickLitsner {
+
 
 
     private var messagesList: MessagesList? = null
@@ -63,6 +69,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     var realm: Realm? = null
 
     var userExp: Int = 0
+
+    var recommandList: ArrayList<String>? = null
+    var recommendAdapter: ChatRecommendAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +97,6 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
 
         aiService?.setListener(this)
-
         aiRequest = AIRequest()
 //        aiRequest!!.setQuery("Hello")
 
@@ -107,8 +116,30 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
         userExp = Paper.book("user").read<Int>("exp")
 
+        initRecommendList()
+        recommendAdapter = ChatRecommendAdapter(recommandList!!, this)
+        recommendAdapter!!.setItemClickListener(this)
+
+        with(recycler_view) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            adapter = recommendAdapter
+        }
+
 
 //        backgroundTask().execute(aiRequest)
+    }
+
+    override fun onItemClicked(v: View, position: Int) {
+        toast(recommandList!![position])
+    }
+
+    fun initRecommendList(){
+        recommandList = ArrayList<String>()
+        recommandList!!.add("안녕하세요")
+        recommandList!!.add("안녕")
+        recommandList!!.add("반가워")
+        recommandList!!.add("혈당 기록하기")
     }
 
 
@@ -416,10 +447,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                                 gluco.userDetailTime = tms
                             }
 
-                            userExp += when(detailType){
+                            userExp += when (detailType) {
                                 "공복" -> 10
                                 "취침전" -> 10
-                                "취침 전"-> 10
+                                "취침 전" -> 10
                                 else -> 5
                             }
 
