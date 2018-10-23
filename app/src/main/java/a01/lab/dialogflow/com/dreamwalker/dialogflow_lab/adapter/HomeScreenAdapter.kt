@@ -67,7 +67,8 @@ class HomeScreenAdapter(list: ArrayList<Glucose>, context: Context) : RecyclerVi
     }
 
 
-    inner class HomeScreenViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class HomeScreenViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener{
+
 
 
         var container: ConstraintLayout
@@ -86,6 +87,7 @@ class HomeScreenAdapter(list: ArrayList<Glucose>, context: Context) : RecyclerVi
             userTimeTextView = itemView.findViewById(R.id.user_time) as TextView
             userValueTextView = itemView.findViewById(R.id.user_value) as TextView
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
 
         }
 
@@ -94,6 +96,18 @@ class HomeScreenAdapter(list: ArrayList<Glucose>, context: Context) : RecyclerVi
                 itemClickListener!!.onItemClicked(v, adapterPosition)
 
             }
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+
+            if (itemClickListener != null) {
+                if (v != null) {
+                    itemClickListener!!.onItemLongCllicked(v, adapterPosition)
+                }
+
+            }
+            return true
+
         }
     }
 

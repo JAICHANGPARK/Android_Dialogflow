@@ -54,6 +54,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
         TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener, ItemClickLitsner {
 
+    override fun onItemLongCllicked(v: View, position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 
     private var messagesList: MessagesList? = null
     val senderId = "0"
