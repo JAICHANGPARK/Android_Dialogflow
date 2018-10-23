@@ -1,8 +1,10 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.util.LevelDesign
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -11,6 +13,7 @@ import android.view.MenuItem
 import io.paperdb.Paper
 import kotlinx.android.synthetic.main.activity_home.*
 import lab.dialogflow.com.dreamwalker.backdrop.BackdropBehavior
+import org.jetbrains.anko.toast
 
 class HomeActivity : AppCompatActivity() {
 
@@ -21,23 +24,26 @@ class HomeActivity : AppCompatActivity() {
         private const val ARG_LAST_MENU_ITEM = "last_menu_item"
 
         private const val MENU_GALLERY = R.id.menuGallery
-        private const val MENU_TEXT = R.id.menuText
         private const val MENU_DIARY = R.id.menuDairy
+        private const val MENU_TEXT = R.id.menuText
 //        private const val MENU_LIST = R.id.menuList
 
         private const val FRAGMENT_CONTAINER = R.id.foregroundContainer
 
-        private const val DEFAULT_ITEM = MENU_GALLERY
+        private const val DEFAULT_ITEM = MENU_DIARY
     }
 
     var userExp: Int = 0
     var userLevel: Int = 1
 
+    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         Paper.init(this)
+        val androidIDs = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
+        toast(androidIDs.toString())
 
         backdropBehavior = foregroundContainer.findBehavior()
         with(backdropBehavior) {
@@ -107,8 +113,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun checkMenuPosition(@IdRes menuItemId: Int) {
         when (menuItemId) {
-            MENU_DIARY -> showPage(HomeFragment())
+
             MENU_GALLERY -> showPage(HomeFragment())
+            MENU_DIARY -> showPage(HomeFragment())
 //            MENU_TEXT -> showPage(TextScreen())
 //            MENU_LIST -> showPage(ListScreen())
         }
@@ -120,10 +127,18 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
+    private var time: Long = 0
     override fun onBackPressed() {
         if (!backdropBehavior.close()) {
-            finish()
+//            finish()
+            if (System.currentTimeMillis() - time >= 2000) {
+                time = System.currentTimeMillis()
+                toast("뒤로 가기 버튼을 한번 더 누르면 종료합니다.")
+            } else if (System.currentTimeMillis() - time < 2000) {
+                finish()
+            }
         }
+        
     }
 
     private fun showPage(page: Fragment) {
@@ -150,6 +165,7 @@ class HomeActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
 
 
 }
