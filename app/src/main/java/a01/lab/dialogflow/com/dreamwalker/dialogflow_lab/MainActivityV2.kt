@@ -127,8 +127,6 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             adapter = recommendAdapter
         }
-
-
 //        backgroundTask().execute(aiRequest)
     }
 
@@ -136,7 +134,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //        toast(recommandList!![position])
 
         messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), recommandList!![position]), true)
-        processRecommandFromDialogFlow(recommandList!![position])
+        processResponseFromDialogFlow(recommandList!![position])
     }
 
     fun initRecommendList() {
@@ -410,170 +408,16 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                                 .getJSONObject(0)
                                 .getJSONObject("parameters")
 
-                        if (responseName.equals("writeuserrequest-yes-datain-followup")) {
 
-                            val writeType = parameters.getString("WriteType")
-                            val dateTime = parameters.getString("date-time")
-                            val dateTimeOriginal = parameters.getString("date-time.original")
-                            val userTypeTime = parameters.getString("UserTypeTime")
-                            val userTypeTimeOriginal = parameters.getString("UserTypeTime.original")
-                            val timeOriginal = parameters.getString("time.original")
-                            val numberIntegerByglucose = parameters.getString("number-integer")
-                            val detailType = parameters.getString("DetailTypes")
-                            val tms = parameters.getString("time")
-
-                            Logger.getLogger(MainActivity::class.java.name).warning(
-                                    "$writeType|$dateTime|$dateTimeOriginal|" +
-                                            "$userTypeTime|$userTypeTimeOriginal|$timeOriginal" +
-                                            "|$numberIntegerByglucose|$detailType|"
-                            )
-
-//                                    String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-                            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA)
-                            val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-                            val outputTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.KOREA)
-                            val outputDateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
-                            val date = inputFormat.parse(dateTime) //2018-04-10T04:00:00.000Z
-                            val formattedDate = outputFormat.format(date)
-                            val formattedTime = outputTimeFormat.format(date)
-                            val formattedDateTime = outputDateTimeFormat.format(date)
-                            println(formattedDate) // prints 10-04-2018
-
-
-                            realm?.executeTransaction {
-                                val gluco = realm!!.createObject(Glucose::class.java)
-                                gluco.date = date
-                                gluco.rawDate = formattedDate
-                                gluco.rawTime = formattedTime
-                                gluco.datetime = formattedDateTime
-                                gluco.userGlucoValue = numberIntegerByglucose.toFloat()
-                                gluco.userTypeTime = userTypeTime // 아침 점심 저녁
-                                gluco.userType = detailType // 운동
-                                gluco.userDetailTime = tms
-                            }
-
-                            userExp += when (detailType) {
-                                "공복" -> 10
-                                "취침전" -> 10
-                                "취침 전" -> 10
-                                else -> 5
-                            }
-
-                            Paper.book("user").write("exp", userExp)
-
-                            val intent = Intent(applicationContext, HomeActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
-                            finish()
-
-                        }
-
-                        Logger.getLogger(MainActivity::class.java.name).warning(
-                                result
-                                        .get()
-                                        .obj()
-                                        .getJSONObject("result")
-                                        .getJSONArray("contexts")
-                                        .getJSONObject(0)
-                                        .getString("name")
-                        )
-                    }
-
-
-                    val reply = result.get().obj()
-                            .getJSONObject("result")
-                            .getJSONObject("fulfillment")
-                            .getString("speech")
-
-                    Logger.getLogger(MainActivity::class.java.name).warning(reply)
-
-                    messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), reply), true)
-                    //todo dialog flow 리턴값 tts 처리
-                    speekResponse(reply)
-                }
-
-    }
-
-    fun processRecommandFromDialogFlow(result: String?) {
-
-        Fuel.get(
-                "https://api.dialogflow.com/v1/query?",
-                listOf(
-                        "v" to "20150910",
-                        "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
-                        "lang" to "ko",   // English language
-                        "query" to result
-                )
-        ).header("Authorization" to "Bearer $keys")
-                .responseJson { _, _, result ->
-
-                    if (result.get().obj().getJSONObject("result").getJSONArray("contexts").length() != 0) {
-                        val responseName = result
-                                .get()
-                                .obj()
-                                .getJSONObject("result")
-                                .getJSONArray("contexts")
-                                .getJSONObject(0)
-                                .getString("name")
-
-                        val parameters = result
-                                .get()
-                                .obj()
-                                .getJSONObject("result")
-                                .getJSONArray("contexts")
-                                .getJSONObject(0)
-                                .getJSONObject("parameters")
+                        val actions = result.get().obj().getJSONObject("result").getString("action")
 
                         val agentReply = result.get().obj()
                                 .getJSONObject("result")
                                 .getJSONObject("fulfillment")
                                 .getString("speech")
 
-                        if ("맞나요?" in agentReply) {
-                            recommandList?.clear()
-                            recommandList?.addAll(RecommendChat.getRecommendYes())
-                            recommandList?.addAll(RecommendChat.getRecommendNo())
-                            recommendAdapter?.notifyDataSetChanged()
-                        }
-
-                        when (agentReply) {
-
-                            "안녕하세요" -> {
-                                recommandList?.clear()
-                                recommandList?.addAll(RecommendChat.getinitRecommendDataSet())
-                                recommendAdapter?.notifyDataSetChanged()
-                            }
-
-                            "네 알겠습니다. 혈당 기록을 진행할까요?" -> {
-                                recommandList?.clear()
-                                recommandList?.addAll(RecommendChat.getRecommendYes())
-                                recommendAdapter?.notifyDataSetChanged()
-                            }
-
-                            "언제 채혈하셨어요?" -> {
-                                recommandList?.clear()
-                                recommandList?.addAll(RecommendChat.getRecommendWhen())
-                                recommendAdapter?.notifyDataSetChanged()
-                            }
-
-                            "혈당 수치[mm/dL]는 어떻게 되세요?" -> {
-                                recommandList?.clear()
-                                recommendAdapter?.notifyDataSetChanged()
-                            }
-
-                            "측정하신 시점의 유형은 어떻게 되시나요? (공복, 식사전 또는 후, 운동 전 또는 후 취침전)" -> {
-                                recommandList?.clear()
-                                recommandList?.addAll(RecommendChat.getRecommendDetailTypes())
-                                recommendAdapter?.notifyDataSetChanged()
-                            }
-
-                            "아침, 점심, 저녁 언제 하셨어요?" -> {
-                                recommandList?.clear()
-                                recommandList?.addAll(RecommendChat.getRecommendDetailTypeTimes())
-                                recommendAdapter?.notifyDataSetChanged()
-                            }
-
-                        }
+                        //TODO 리코멘드 값 처리
+                        processRecommandFromDialogFlow(actions, agentReply)
 
                         if (responseName == "writeuserrequest-yes-datain-followup") {
 
@@ -657,6 +501,61 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                     speekResponse(reply)
                 }
 
+    }
+
+    fun processRecommandFromDialogFlow(action: String?, agentReply: String) {
+
+
+        if ("맞나요?" in agentReply) {
+            recommandList?.clear()
+            recommandList?.addAll(RecommendChat.getRecommendYes())
+            recommandList?.addAll(RecommendChat.getRecommendNo())
+            recommendAdapter?.notifyDataSetChanged()
+        }
+
+        if (action == "WriteUserRequest.WriteUserRequest-yes") {
+            recommandList?.clear()
+            recommendAdapter?.notifyDataSetChanged()
+        }
+
+        when (agentReply) {
+
+            "안녕하세요" -> {
+                recommandList?.clear()
+                recommandList?.addAll(RecommendChat.getinitRecommendDataSet())
+                recommendAdapter?.notifyDataSetChanged()
+            }
+
+            "네 알겠습니다. 혈당 기록을 진행할까요?" -> {
+                recommandList?.clear()
+                recommandList?.addAll(RecommendChat.getRecommendYes())
+                recommendAdapter?.notifyDataSetChanged()
+            }
+
+            "언제 채혈하셨어요?" -> {
+                recommandList?.clear()
+                recommandList?.addAll(RecommendChat.getRecommendWhen())
+                recommendAdapter?.notifyDataSetChanged()
+            }
+
+            "혈당 수치[mm/dL]는 어떻게 되세요?" -> {
+                recommandList?.clear()
+                recommendAdapter?.notifyDataSetChanged()
+            }
+
+            "측정하신 시점의 유형은 어떻게 되시나요? (공복, 식사전 또는 후, 운동 전 또는 후 취침전)" -> {
+                recommandList?.clear()
+                recommandList?.addAll(RecommendChat.getRecommendDetailTypes())
+                recommendAdapter?.notifyDataSetChanged()
+            }
+
+            "아침, 점심, 저녁 언제 하셨어요?" -> {
+                recommandList?.clear()
+                recommandList?.addAll(RecommendChat.getRecommendDetailTypeTimes())
+                recommendAdapter?.notifyDataSetChanged()
+            }
+
+        }
     }
 
     override fun onInit(status: Int) {
