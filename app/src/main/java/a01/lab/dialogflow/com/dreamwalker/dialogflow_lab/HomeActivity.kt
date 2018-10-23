@@ -22,6 +22,7 @@ class HomeActivity : AppCompatActivity() {
 
         private const val MENU_GALLERY = R.id.menuGallery
         private const val MENU_TEXT = R.id.menuText
+        private const val MENU_DIARY = R.id.menuDairy
 //        private const val MENU_LIST = R.id.menuList
 
         private const val FRAGMENT_CONTAINER = R.id.foregroundContainer
@@ -106,6 +107,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun checkMenuPosition(@IdRes menuItemId: Int) {
         when (menuItemId) {
+            MENU_DIARY -> showPage(HomeFragment())
             MENU_GALLERY -> showPage(HomeFragment())
 //            MENU_TEXT -> showPage(TextScreen())
 //            MENU_LIST -> showPage(ListScreen())

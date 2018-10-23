@@ -2,14 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menuDairy"
+            android:title="내 다이어리" />
+
         <item
             android:id="@+id/menuGallery"
-            android:title="경향 보기"/>
+            android:title="경향 보기" />
+
         <item
             android:id="@+id/menuText"
-            android:title="설정"/>
+            android:title="설정" />
         <!--<item-->
-            <!--android:id="@+id/menuList"-->
-            <!--android:title="List"/>-->
+        <!--android:id="@+id/menuList"-->
+        <!--android:title="List"/>-->
     </group>
 </menu>
