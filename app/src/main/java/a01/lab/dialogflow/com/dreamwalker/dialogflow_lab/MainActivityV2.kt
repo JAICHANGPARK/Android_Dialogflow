@@ -424,7 +424,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                             }
 
                             Paper.book("user").write("exp", userExp)
-                            
+
                             val intent = Intent(applicationContext, HomeActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)

@@ -80,16 +80,20 @@ class HomeActivity : AppCompatActivity() {
             Paper.book("user").write("level", 1)
             userExp = 0
             userLevel = 1
-            user_exp_progressbar.progress = userExp.toFloat()
-            user_level_text_view.text = LevelDesign.getUserLevelText(userLevel)
             val needExp = LevelDesign.getNeedsExp(userLevel)
+            user_exp_progressbar.max = needExp!!.toFloat()
+            user_exp_progressbar.progress = userExp.toFloat()
+            user_level_text_view.text = LevelDesign.getUserLevelText(userLevel) + " (Level: $userLevel)"
             user_exp_text_view.text = "$userExp / $needExp"
         } else {
             userExp = Paper.book("user").read<Int>("exp")
             userLevel = Paper.book("user").read<Int>("level")
-            user_exp_progressbar.progress = userExp.toFloat()
-            user_level_text_view.text = LevelDesign.getUserLevelText(userLevel)
+            userLevel = LevelDesign.getUserLevel(userExp)
             val needExp = LevelDesign.getNeedsExp(userLevel)
+
+            user_exp_progressbar.max = needExp!!.toFloat()
+            user_exp_progressbar.progress = userExp.toFloat()
+            user_level_text_view.text = LevelDesign.getUserLevelText(userLevel) + " (Level: $userLevel)"
             user_exp_text_view.text = "$userExp / $needExp"
         }
 

@@ -26,13 +26,15 @@ class LevelDesign {
                     return list[x].exp
                 }
             }
+
             return 0
+
         }
 
         fun getUserLevel(exp: Int): Int {
             var level: Int = 0
             when {
-                exp < 10 -> level = 1
+                exp in 0..9 -> level = 1
                 exp in 10..19 -> level = 2
                 exp in 20..39 -> level = 3
                 exp in 40..69 -> level = 4
