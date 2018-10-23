@@ -1,8 +1,11 @@
 # Android_Dialogflow
 
 
--  당뇨병 환자를 위한 피트니스 모바일 애플리케이션
--  연구용 파일럿 프로젝트 
+-  당뇨병 환자를 위한 혈당 기록 모바일 애플리케이션.
+-  기존 방식과 다른 인공지능 쳇봇을 활용한 대화형 기록 방식.
+-  기본 Small Talk로 혈당 기록뿐만 아니라 일상 대화 가능.
+-  연구용 파일럿 프로젝트.
+
 -  Lang : kotlin, Java
 
 <img src="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/app_source/icons/playstore/icon.png" width="200">
