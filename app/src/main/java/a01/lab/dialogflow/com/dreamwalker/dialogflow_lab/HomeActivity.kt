@@ -38,13 +38,11 @@ class HomeActivity : AppCompatActivity() {
 
         Paper.init(this)
 
-
         backdropBehavior = foregroundContainer.findBehavior()
         with(backdropBehavior) {
             attachBackContainer(R.id.backContainer)
             attachToolbar(R.id.toolbar)
         }
-
         with(toolbar) {
             setTitle(R.string.app_name)
         }
@@ -67,20 +65,29 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        processUserLevel()
+
 
 //        user_exp_progressbar.progress = 5.0f
 
+
+
+    }
+
+    fun processUserLevel(){
         val levelList = LevelDesign.getLevelAndExp()
         levelList.forEach { i ->
             println("Out: array 사이즈는 ${levelList.size} 요청한 x = ${i.level}")
 //            Logger.getLogger(this::class.java.name).warning(i.level.toString())
         }
+
         if (Paper.book("user").read<Int>("exp") == null) {
             Paper.book("user").write("exp", 0)
             Paper.book("user").write("level", 1)
             userExp = 0
             userLevel = 1
             val needExp = LevelDesign.getNeedsExp(userLevel)
+
             user_exp_progressbar.max = needExp!!.toFloat()
             user_exp_progressbar.progress = userExp.toFloat()
             user_level_text_view.text = LevelDesign.getUserLevelText(userLevel) + " (Level: $userLevel)"

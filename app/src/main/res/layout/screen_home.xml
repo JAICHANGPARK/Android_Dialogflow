@@ -41,7 +41,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:selectorColor="@color/black"
         app:colorBottomTextSelected="@color/black"
         app:colorMiddleTextSelected="@color/black"
         app:colorTopTextSelected="@color/black"
