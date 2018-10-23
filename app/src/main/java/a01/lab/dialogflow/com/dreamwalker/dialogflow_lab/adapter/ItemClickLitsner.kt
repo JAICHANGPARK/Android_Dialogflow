@@ -1,4 +1,7 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter
 
-interface ItemClickLitsner {
+import android.view.View
+
+ interface ItemClickLitsner {
+    fun onItemClicked(v: View, position: Int)
 }

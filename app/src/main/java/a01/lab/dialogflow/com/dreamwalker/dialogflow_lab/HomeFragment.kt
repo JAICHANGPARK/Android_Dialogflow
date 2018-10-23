@@ -1,6 +1,7 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.HomeScreenAdapter
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.ItemClickLitsner
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.screen_home.*
+import org.jetbrains.anko.toast
 import ru.semper_viventem.backdropview.ui.common.Screen
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,9 +19,10 @@ import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
 
-class HomeFragment : Screen() {
-    override val layoutId: Int = R.layout.screen_home
+class HomeFragment : Screen(), ItemClickLitsner {
 
+
+    override val layoutId: Int = R.layout.screen_home
 
     var homeAdapter: HomeScreenAdapter? = null
     var glucoseArrayList = ArrayList<Glucose>()
@@ -64,6 +67,10 @@ class HomeFragment : Screen() {
             }
         }
 
+//        homeAdapter!!.itemClickListener = this
+        homeAdapter!!.setItemClickListener(this)
+
+
         horizontalCalendar.calendarListener = listener
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
@@ -72,9 +79,14 @@ class HomeFragment : Screen() {
             layoutManager = LinearLayoutManager(activity)
             adapter = homeAdapter
             addItemDecoration(dividerItemDecoration)
+
         }
 
+    }
 
+    override fun onItemClicked(v: View, position: Int) {
+
+        activity!!.toast(position.toString())
     }
 
 

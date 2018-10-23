@@ -71,10 +71,9 @@ class HomeActivity : AppCompatActivity() {
 //        user_exp_progressbar.progress = 5.0f
 
 
-
     }
 
-    fun processUserLevel(){
+    fun processUserLevel() {
         val levelList = LevelDesign.getLevelAndExp()
         levelList.forEach { i ->
             println("Out: array 사이즈는 ${levelList.size} 요청한 x = ${i.level}")
@@ -103,7 +102,6 @@ class HomeActivity : AppCompatActivity() {
             user_level_text_view.text = LevelDesign.getUserLevelText(userLevel) + " (Level: $userLevel)"
             user_exp_text_view.text = "$userExp / $needExp"
         }
-
     }
 
     private fun checkMenuPosition(@IdRes menuItemId: Int) {

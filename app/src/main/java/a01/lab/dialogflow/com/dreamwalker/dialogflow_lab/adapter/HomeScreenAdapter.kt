@@ -3,6 +3,7 @@ package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -20,25 +21,33 @@ class HomeScreenAdapter(list: ArrayList<Glucose>, context: Context) : RecyclerVi
     val context = context
     private val mColorGenerator = ColorGenerator.DEFAULT
     private var mDrawableBuilder: TextDrawable? = null
+    internal var itemClickListener: ItemClickLitsner? = null
+
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): HomeScreenViewHolder {
         val view = LayoutInflater.from(p0.context).inflate(R.layout.item_glucose_layout, p0, false)
         return HomeScreenViewHolder(view)
     }
 
+
     override fun onBindViewHolder(p0: HomeScreenViewHolder, p1: Int) {
         val userType = glucoList[p1].userType
-        with(p0){
+
+        with(p0) {
             setReminderTitle(userType)
             imageView.setImageDrawable(mDrawableBuilder)
             userTypeTextView.text = userType
             userTypeTimeTextView.text = glucoList[p1].userTypeTime
             userValueTextView.text = glucoList[p1].userGlucoValue.toString() + " mg/dL"
             userTimeTextView.text = DateFormat.getTimeInstance(DateFormat.SHORT).format(glucoList[p1].date)
-        }
 
+        }
     }
 
+
+    fun setItemClickListener(itemClickListener: ItemClickLitsner) {
+        this.itemClickListener = itemClickListener
+    }
 
     override fun getItemCount(): Int {
         return glucoList.size
@@ -58,13 +67,35 @@ class HomeScreenAdapter(list: ArrayList<Glucose>, context: Context) : RecyclerVi
     }
 
 
-    class HomeScreenViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView = itemView.findViewById(R.id.imageView) as ImageView
-        val userTypeTimeTextView = itemView.findViewById(R.id.text_type_time) as TextView
-        val userTypeTextView = itemView.findViewById(R.id.text_type) as TextView
-        val userTimeTextView = itemView.findViewById(R.id.user_time) as TextView
-        val userValueTextView = itemView.findViewById(R.id.user_value) as TextView
+    inner class HomeScreenViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
+
+        var container: ConstraintLayout
+        var imageView: ImageView
+        var userTypeTimeTextView: TextView
+        var userTypeTextView: TextView
+        var userTimeTextView: TextView
+        var userValueTextView: TextView
+
+        init {
+
+            container = itemView.findViewById(R.id.container) as ConstraintLayout
+            imageView = itemView.findViewById(R.id.imageView) as ImageView
+            userTypeTimeTextView = itemView.findViewById(R.id.text_type_time) as TextView
+            userTypeTextView = itemView.findViewById(R.id.text_type) as TextView
+            userTimeTextView = itemView.findViewById(R.id.user_time) as TextView
+            userValueTextView = itemView.findViewById(R.id.user_value) as TextView
+            itemView.setOnClickListener(this)
+
+        }
+
+        override fun onClick(v: View) {
+            if (itemClickListener != null) {
+                itemClickListener!!.onItemClicked(v, adapterPosition)
+
+            }
+        }
     }
+
 
 }
