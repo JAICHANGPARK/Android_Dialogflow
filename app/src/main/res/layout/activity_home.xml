@@ -45,6 +45,7 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:gravity="end"
                     android:id="@+id/user_exp_text_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

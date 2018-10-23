@@ -84,7 +84,6 @@ class HomeActivity : AppCompatActivity() {
             user_level_text_view.text = LevelDesign.getUserLevelText(userLevel)
             val needExp = LevelDesign.getNeedsExp(userLevel)
             user_exp_text_view.text = "$userExp / $needExp"
-
         } else {
             userExp = Paper.book("user").read<Int>("exp")
             userLevel = Paper.book("user").read<Int>("level")
@@ -92,7 +91,6 @@ class HomeActivity : AppCompatActivity() {
             user_level_text_view.text = LevelDesign.getUserLevelText(userLevel)
             val needExp = LevelDesign.getNeedsExp(userLevel)
             user_exp_text_view.text = "$userExp / $needExp"
-
         }
 
     }
