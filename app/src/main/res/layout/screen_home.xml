@@ -1,6 +1,5 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -37,13 +36,13 @@
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:backgroundTint="@color/white"
+        app:colorBottomTextSelected="@color/black"
+        app:colorMiddleTextSelected="@color/black"
+        app:colorTopTextSelected="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:colorBottomTextSelected="@color/black"
-        app:colorMiddleTextSelected="@color/black"
-        app:colorTopTextSelected="@color/black"
         app:sizeBottomText="14sp"
         app:sizeMiddleText="20sp"
         app:textColorSelected="#FFFF" />
@@ -59,5 +58,34 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <LinearLayout
+        android:id="@+id/empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_margin="8dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/me_at_office" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="기록된 혈당수치가 없어요"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
