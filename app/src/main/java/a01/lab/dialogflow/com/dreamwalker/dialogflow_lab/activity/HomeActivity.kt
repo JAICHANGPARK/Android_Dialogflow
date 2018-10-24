@@ -181,7 +181,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showInitTargetView() {
-
         val flag = Paper.book("user").read("first_tap_target", false) as Boolean
         if (flag) {
             toast("어서오세요")
@@ -213,10 +212,6 @@ class HomeActivity : AppCompatActivity() {
                         Paper.book("user").write("first_tap_target", true)
                     }
                 })
-
         }
-
     }
-
-
 }
