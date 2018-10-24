@@ -10,6 +10,13 @@
 
 <img src="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/app_source/icons/playstore/icon.png" width="200">
 
+
+## Google Play Store
+
+<img src="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/app_source/mock/mockup-images_1/mockup-images/mockup.png" >
+
+<a href='https://play.google.com/store/apps/details?id=a01.lab.dialogflow.com.dreamwalker.dialogflow_lab&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width= 400/></a>
+
 ## Using AI NLP Chat Api
 1. [dialogflow](https://dialogflow.com/)
 
