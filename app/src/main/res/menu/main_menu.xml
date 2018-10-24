@@ -12,7 +12,7 @@
             android:title="경향 보기" />
 
         <item
-            android:id="@+id/menuText"
+            android:id="@+id/menuSetting"
             android:title="설정" />
         <!--<item-->
         <!--android:id="@+id/menuList"-->

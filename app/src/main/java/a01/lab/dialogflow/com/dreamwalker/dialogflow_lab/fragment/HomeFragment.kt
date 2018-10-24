@@ -1,5 +1,6 @@
-package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
+package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.HomeScreenAdapter
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.ItemClickLitsner
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
@@ -65,7 +66,9 @@ class HomeFragment : Screen(), ItemClickLitsner {
 
             for (i in tmp.indices) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    events.add(CalendarEvent(getColor(activity!!.applicationContext, R.color.colorAccent), "count"))
+                    events.add(CalendarEvent(getColor(activity!!.applicationContext,
+                        R.color.colorAccent
+                    ), "count"))
                 } else {
                     events.add(CalendarEvent(R.color.colorAccent, "count"))
                 }
@@ -73,7 +76,9 @@ class HomeFragment : Screen(), ItemClickLitsner {
             events
         }
 
-        val horizontalCalendar = HorizontalCalendar.Builder(view, R.id.calendarView)
+        val horizontalCalendar = HorizontalCalendar.Builder(view,
+            R.id.calendarView
+        )
             .range(startDate, endDate)
             .datesNumberOnScreen(5)
             .addEvents(predict)
@@ -148,6 +153,4 @@ class HomeFragment : Screen(), ItemClickLitsner {
         builder.setNegativeButton(android.R.string.no) { dialog, _ -> dialog.dismiss() }
         builder.show()
     }
-
-
 }

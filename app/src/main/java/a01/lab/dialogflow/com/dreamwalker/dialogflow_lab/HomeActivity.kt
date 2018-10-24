@@ -1,5 +1,7 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment.AnalysisFragment
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment.HomeFragment
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.util.LevelDesign
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -25,7 +27,7 @@ class HomeActivity : AppCompatActivity() {
 
         private const val MENU_GALLERY = R.id.menuGallery
         private const val MENU_DIARY = R.id.menuDairy
-        private const val MENU_TEXT = R.id.menuText
+        private const val MENU_SETTING = R.id.menuSetting
 //        private const val MENU_LIST = R.id.menuList
 
         private const val FRAGMENT_CONTAINER = R.id.foregroundContainer
@@ -114,8 +116,13 @@ class HomeActivity : AppCompatActivity() {
     private fun checkMenuPosition(@IdRes menuItemId: Int) {
         when (menuItemId) {
 
-            MENU_GALLERY -> showPage(HomeFragment())
+
             MENU_DIARY -> showPage(HomeFragment())
+            MENU_GALLERY -> showPage(AnalysisFragment())
+            MENU_SETTING -> {
+                val intent = Intent(this, SettingActivity::class.java)
+                startActivity(intent)
+            }
 //            MENU_TEXT -> showPage(TextScreen())
 //            MENU_LIST -> showPage(ListScreen())
         }
@@ -138,7 +145,7 @@ class HomeActivity : AppCompatActivity() {
                 finish()
             }
         }
-        
+
     }
 
     private fun showPage(page: Fragment) {
