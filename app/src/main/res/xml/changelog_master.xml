@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog>
+
+    <release version="1.0.4" versioncode="5">
+        <change>Date : 2018-10-24</change>
+        <change>Added Setting Menu</change>
+        <change>Added Analysis Graph(Chart) Screen</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+
+    <release version="1.0.3" versioncode="4">
+        <change>Date : 2018-10-23</change>
+        <change>Diary Menu Added</change>
+        <change>Added Recommend Chat Message </change>
+        <change>Change Internal DB SQLite to Realm </change>
+        <change>Crash Fixed</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+
+    <release version="1.0.2" versioncode="3">
+        <change>Date : 2018-10-22</change>
+        <change>Added Google STT</change>
+        <change>Dialogflow fixed and Change Version</change>
+        <change>Added Home Screen</change>
+        <change>Added User Level</change>
+        <change>Bug Fixed and Crash Fixed</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+
+    <release version="1.0.1" versioncode="2">
+        <change>Date : 2018-10-21</change>
+        <change>Chat UI change</change>
+        <change>Fixed bug</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+
+    <release version="1.0.0" versioncode="1">
+        <change>Date : 2018-10-19</change>
+        <change>First release</change>
+        <change>AI chat function test</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+</changelog>
