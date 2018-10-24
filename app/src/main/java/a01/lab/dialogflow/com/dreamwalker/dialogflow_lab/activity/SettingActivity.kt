@@ -1,5 +1,6 @@
-package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
+package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_setting.*

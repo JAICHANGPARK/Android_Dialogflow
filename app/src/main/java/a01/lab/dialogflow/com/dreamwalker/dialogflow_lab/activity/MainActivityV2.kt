@@ -1,5 +1,6 @@
-package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
+package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.ChatRecommendAdapter
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.ItemClickLitsner
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
@@ -159,7 +160,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         messagesAdapter?.enableSelectionMode(this)
         messagesAdapter?.setLoadMoreListener(this)
         messagesAdapter?.registerViewClickListener(
-                R.id.messageUserAvatar
+            R.id.messageUserAvatar
         ) { view, message ->
             //                        AppUtils.showToast(DefaultMessagesActivity.this,
             //                                message.getUser().getName() + " avatar click",

@@ -36,7 +36,7 @@ class HomeFragment : Screen(), ItemClickLitsner {
     var realm: Realm? = null
 
     override fun onInitView(view: View) {
-        val defaultSelectedDate = Calendar.getInstance();
+        val defaultSelectedDate = Calendar.getInstance()
         simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
         val todayDate = defaultSelectedDate.time
         val todayString = simpleDateFormat.format(todayDate)

@@ -1,10 +1,13 @@
-package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
+package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.findBehavior
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment.AnalysisFragment
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment.HomeFragment
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.util.LevelDesign
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
 import android.support.annotation.IdRes
@@ -12,10 +15,13 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import io.paperdb.Paper
 import kotlinx.android.synthetic.main.activity_home.*
 import lab.dialogflow.com.dreamwalker.backdrop.BackdropBehavior
 import org.jetbrains.anko.toast
+
 
 class HomeActivity : AppCompatActivity() {
 
@@ -30,9 +36,11 @@ class HomeActivity : AppCompatActivity() {
         private const val MENU_SETTING = R.id.menuSetting
 //        private const val MENU_LIST = R.id.menuList
 
-        private const val FRAGMENT_CONTAINER = R.id.foregroundContainer
+        private const val FRAGMENT_CONTAINER =
+            R.id.foregroundContainer
 
-        private const val DEFAULT_ITEM = MENU_DIARY
+        private const val DEFAULT_ITEM =
+            MENU_DIARY
     }
 
     var userExp: Int = 0
@@ -46,6 +54,8 @@ class HomeActivity : AppCompatActivity() {
         Paper.init(this)
         val androidIDs = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
         toast(androidIDs.toString())
+
+        showInitTargetView()
 
         backdropBehavior = foregroundContainer.findBehavior()
         with(backdropBehavior) {
@@ -150,9 +160,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showPage(page: Fragment) {
         supportFragmentManager
-                .beginTransaction()
-                .replace(FRAGMENT_CONTAINER, page)
-                .commit()
+            .beginTransaction()
+            .replace(FRAGMENT_CONTAINER, page)
+            .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -164,15 +174,49 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.home -> {
-
                 return true
             }
-
         }
-
         return super.onOptionsItemSelected(item)
     }
 
+    private fun showInitTargetView() {
+
+        val flag = Paper.book("user").read("first_tap_target", false) as Boolean
+        if (flag) {
+            toast("어서오세요")
+        } else {
+            TapTargetView.showFor(this, // `this` is an Activity
+                TapTarget.forView(findViewById(R.id.fab), "당뇨모리만의 특별한 혈당 기록", "당뇨모리 에이전트와 대화도 가능하며 혈당 기록도 가능합니다.")
+                    // All options below are optional
+                    .outerCircleColor(R.color.red)      // Specify a color for the outer circle
+                    .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                    .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                    .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                    .titleTextColor(R.color.white)      // Specify the color of the title text
+                    .descriptionTextSize(16)            // Specify the size (in sp) of the description text
+                    .descriptionTextColor(R.color.red)  // Specify the color of the description text
+                    .textColor(R.color.white)            // Specify a color for both the title and description text
+                    .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                    .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                    .drawShadow(true)                   // Whether to draw a drop shadow or not
+                    .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                    .tintTarget(true)                   // Whether to tint the target view's color
+                    .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
+                    .icon(getDrawable(R.drawable.ic_chat_black_24dp))                     // Specify a custom drawable to draw as the target
+                    .targetRadius(60), // Specify the target radius (in dp)
+                object :
+                    TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    override fun onTargetClick(view: TapTargetView) {
+                        super.onTargetClick(view)      // This call is optional
+//                        toast("clicked")
+                        Paper.book("user").write("first_tap_target", true)
+                    }
+                })
+
+        }
+
+    }
 
 
 }

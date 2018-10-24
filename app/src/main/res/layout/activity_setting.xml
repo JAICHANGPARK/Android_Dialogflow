@@ -7,7 +7,7 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".SettingActivity">
+    tools:context=".activity.SettingActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_add_contacts"

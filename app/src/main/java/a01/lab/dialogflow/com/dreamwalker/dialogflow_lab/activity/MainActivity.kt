@@ -1,5 +1,6 @@
-package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
+package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity
 
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import ai.api.AIConfiguration.SupportedLanguages
 import ai.api.AIListener
 import ai.api.android.AIConfiguration
