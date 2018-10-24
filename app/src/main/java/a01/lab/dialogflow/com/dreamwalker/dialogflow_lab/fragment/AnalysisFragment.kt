@@ -17,7 +17,7 @@ import kotlin.collections.ArrayList
 
 class AnalysisFragment : Screen() {
 
-    val TAG = this::class.java.name
+    val TAG: String = this::class.java.name
 
     companion object {
         val LAST_DAY = R.id.button1
@@ -26,7 +26,7 @@ class AnalysisFragment : Screen() {
     }
 
     override val layoutId: Int = R.layout.screen_analysis
-    lateinit var entries : ArrayList<Entry>
+    lateinit var entries: ArrayList<Entry>
     var realm: Realm? = null
 
     override fun onInitView(view: View) {
@@ -38,34 +38,37 @@ class AnalysisFragment : Screen() {
         realm = Realm.getInstance(realmConfig)
 //        val allGlucose = realm!!.where(Glucose::class.java).equalTo("rawDate", todayString).findAll().sort("datetime")
         val allGlucose = realm!!.where(Glucose::class.java)
-                .greaterThanOrEqualTo("date", startDate.time)
-                .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
+            .greaterThanOrEqualTo("date", startDate.time)
+            .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
         Log.e(TAG, "" + allGlucose.size)
 
         entries = ArrayList<Entry>()
-        for (i in 0..(allGlucose.size -1)){
+        for (i in 0..(allGlucose.size - 1)) {
             entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
         }
         val lineDataSet = LineDataSet(entries, "1일")
         val lineData = LineData(lineDataSet)
-        with(line_chart){
+        with(line_chart) {
             data = lineData
             invalidate()
         }
 
-
-        segmented3.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId){
-                LAST_DAY -> {
-                    activity!!.toast("최근")
-                }
-                WEEK_DAY ->{
-                    activity!!.toast("일주일")
-                }
-                MONTH_DAY ->{
-                    activity!!.toast("한달")
+        with(segmented3) {
+            setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
+                    LAST_DAY -> {
+                        activity!!.toast("최근")
+                    }
+                    WEEK_DAY -> {
+                        activity!!.toast("일주일")
+                    }
+                    MONTH_DAY -> {
+                        activity!!.toast("한달")
+                    }
                 }
             }
+
+            check(LAST_DAY)
         }
 
 

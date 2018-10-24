@@ -1,6 +1,9 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity
 
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity.appinfo.FeedbackActivity
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity.appinfo.OpenSourceLicenseActivity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -21,9 +24,13 @@ class SettingActivity : AppCompatActivity() {
         }
 
         about_app_button.setOnClickListener {  }
-        licenses_button.setOnClickListener {  }
+        licenses_button.setOnClickListener {
+            startActivity(Intent(this, OpenSourceLicenseActivity::class.java))
+        }
         developer_button.setOnClickListener {  }
-        feedback_button.setOnClickListener {  }
+        feedback_button.setOnClickListener {
+            startActivity(Intent(this, FeedbackActivity::class.java))
+        }
 
     }
 }
