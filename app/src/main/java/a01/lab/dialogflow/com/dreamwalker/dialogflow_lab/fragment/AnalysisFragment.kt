@@ -3,7 +3,6 @@ package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.View
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -63,7 +62,20 @@ class AnalysisFragment : Screen() {
 
     }
 
-    private fun initLineChartSettting(){
+    fun checkLayoutDisplay(arrayList: ArrayList<Glucose>) {
+
+        if (arrayList.size == 0) {
+            empty_layout_analysis.visibility = View.VISIBLE
+            line_chart.visibility = View.GONE
+        } else {
+            empty_layout_analysis.visibility = View.GONE
+            line_chart.visibility = View.VISIBLE
+        }
+
+    }
+
+
+    private fun initLineChartSettting() {
         val xAxis = line_chart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         line_chart.axisRight.isEnabled = false
@@ -80,28 +92,40 @@ class AnalysisFragment : Screen() {
 
 //        val allGlucose = realm!!.where(Glucose::class.java).equalTo("rawDate", todayString).findAll().sort("datetime")
                 val allGlucose = realm!!.where(Glucose::class.java)
-                        .greaterThanOrEqualTo("date", startDate.time)
-                        .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
-                Log.e(TAG, "" + allGlucose.size)
+                    .greaterThanOrEqualTo("date", startDate.time)
+                    .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
+//                Log.e(TAG, "" + allGlucose.size)
+                val glucoseArrayList = ArrayList<Glucose>()
+                glucoseArrayList.addAll(allGlucose)
+                checkLayoutDisplay(glucoseArrayList)
 
-                entries = ArrayList<Entry>()
-                for (i in 0..(allGlucose.size - 1)) {
-                    entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
+                if (allGlucose.size != 0) {
+                    entries = ArrayList<Entry>()
+                    for (i in 0..(allGlucose.size - 1)) {
+                        entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
+                    }
+                    val lineDataSet = LineDataSet(entries, "혈당 수치")
+                    with(lineDataSet) {
+                        mode = LineDataSet.Mode.CUBIC_BEZIER
+                        cubicIntensity = 0.15f
+
+                        color = ContextCompat.getColor(activity!!.applicationContext, R.color.colorAccent)
+                        setCircleColor(ContextCompat.getColor(activity!!.applicationContext, R.color.colorPrimary))
+
+                        circleRadius = 6.0f
+                        circleHoleRadius = 3.0f
+                        lineWidth = 3.0f
+                    }
+
+                    val lineData = LineData(lineDataSet)
+
+                    with(line_chart) {
+                        data = lineData
+                        animateX(200)
+                        invalidate()
+                    }
                 }
-                val lineDataSet = LineDataSet(entries, "1일")
-                lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-                lineDataSet.cubicIntensity = 0.2f
-                lineDataSet.lineWidth = 2.0f
-                lineDataSet.color = ContextCompat.getColor(activity!!.applicationContext, R.color.colorAccent)
 
-                val lineData = LineData(lineDataSet)
-
-                with(line_chart) {
-
-                    data = lineData
-                    animateX(200)
-                    invalidate()
-                }
 
             }
             1 -> {
@@ -112,21 +136,27 @@ class AnalysisFragment : Screen() {
 
 //        val allGlucose = realm!!.where(Glucose::class.java).equalTo("rawDate", todayString).findAll().sort("datetime")
                 val allGlucose = realm!!.where(Glucose::class.java)
-                        .greaterThanOrEqualTo("date", startDate.time)
-                        .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
-                Log.e(TAG, "" + allGlucose.size)
+                    .greaterThanOrEqualTo("date", startDate.time)
+                    .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
+//                Log.e(TAG, "" + allGlucose.size)
 
-                entries = ArrayList<Entry>()
-                for (i in 0..(allGlucose.size - 1)) {
-                    entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
-                }
-                val lineDataSet = LineDataSet(entries, "7일")
-                val lineData = LineData(lineDataSet)
+                val glucoseArrayList = ArrayList<Glucose>()
+                glucoseArrayList.addAll(allGlucose)
+                checkLayoutDisplay(glucoseArrayList)
 
-                with(line_chart) {
-                    data = lineData
-                    animateX(1000)
-                    invalidate()
+                if (allGlucose.size != 0){
+                    entries = ArrayList<Entry>()
+                    for (i in 0..(allGlucose.size - 1)) {
+                        entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
+                    }
+                    val lineDataSet = LineDataSet(entries, "혈당 수치")
+                    val lineData = LineData(lineDataSet)
+
+                    with(line_chart) {
+                        data = lineData
+                        animateX(1000)
+                        invalidate()
+                    }
                 }
 
             }
@@ -139,21 +169,26 @@ class AnalysisFragment : Screen() {
 
 //        val allGlucose = realm!!.where(Glucose::class.java).equalTo("rawDate", todayString).findAll().sort("datetime")
                 val allGlucose = realm!!.where(Glucose::class.java)
-                        .greaterThanOrEqualTo("date", startDate.time)
-                        .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
-                Log.e(TAG, "" + allGlucose.size)
+                    .greaterThanOrEqualTo("date", startDate.time)
+                    .lessThanOrEqualTo("date", endDate.time).findAll().sort("datetime")
 
-                entries = ArrayList<Entry>()
-                for (i in 0..(allGlucose.size - 1)) {
-                    entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
-                }
-                val lineDataSet = LineDataSet(entries, "30일")
-                val lineData = LineData(lineDataSet)
+                val glucoseArrayList = ArrayList<Glucose>()
+                glucoseArrayList.addAll(allGlucose)
+                checkLayoutDisplay(glucoseArrayList)
 
-                with(line_chart) {
-                    data = lineData
-                    animateX(1000)
-                    invalidate()
+                if (allGlucose.size != 0){
+                    entries = ArrayList<Entry>()
+                    for (i in 0..(allGlucose.size - 1)) {
+                        entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
+                    }
+                    val lineDataSet = LineDataSet(entries, "혈당 수치")
+                    val lineData = LineData(lineDataSet)
+
+                    with(line_chart) {
+                        data = lineData
+                        animateX(1000)
+                        invalidate()
+                    }
                 }
 
             }

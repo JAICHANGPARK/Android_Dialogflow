@@ -17,7 +17,6 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.screen_home.*
-import org.jetbrains.anko.toast
 import ru.semper_viventem.backdropview.ui.common.Screen
 import java.text.SimpleDateFormat
 import java.util.*
@@ -131,7 +130,7 @@ class HomeFragment : Screen(), ItemClickLitsner {
 
     override fun onItemClicked(v: View, position: Int) {
 
-        activity!!.toast(position.toString())
+//        activity!!.toast(position.toString())
     }
 
     override fun onItemLongCllicked(v: View, position: Int) {
