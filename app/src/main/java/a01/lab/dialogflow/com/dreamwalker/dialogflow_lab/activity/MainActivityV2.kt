@@ -668,17 +668,16 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                 try {
                     Thread.sleep(1000)
                 } catch (e: Exception) {
-                }
 
+                }
             }
             return null
         }
 
-        override fun onPreExecute() {
-            super.onPreExecute()
+        override fun onPostExecute(result: Void?) {
+            super.onPostExecute(result)
             toast("말하기가 끝났어요")
         }
-
     }
 
 
