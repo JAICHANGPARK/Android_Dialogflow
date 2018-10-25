@@ -22,6 +22,7 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -317,11 +318,6 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         toast("onMic Button Clicked")
 //        aiService!!.startListening()
 
-        if (Speech.getInstance().isListening){
-            Speech.getInstance().stopListening()
-        }
-
-
 
         val colors = intArrayOf(
             ContextCompat.getColor(this, R.color.color1),
@@ -382,14 +378,14 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //                aiRequest!!.setQuery(result)
 //
 //                backgroundTask().execute(aiRequest)
-
-                    if (autoStartVoiceInputFlag) {
-                        onVoiceStart()
-                    } else {
-                        Speech.getInstance().stopListening()
-                    }
-
-
+                    Handler().postDelayed({
+                        if (autoStartVoiceInputFlag) {
+                            onVoiceStart()
+                        } else {
+                            Speech.getInstance().stopListening()
+                            dialog.dismiss()
+                        }
+                    }, 5000)
 
                 } else {
 
@@ -400,9 +396,19 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
 
         try {
-            Speech.getInstance().startListening(speechProgressView, delegate)
+
+            if (Speech.getInstance().isListening) {
+                Speech.getInstance().stopListening()
+                Speech.getInstance().stopTextToSpeech()
+                Speech.getInstance().startListening(speechProgressView, delegate)
+            } else {
+                Speech.getInstance().startListening(speechProgressView, delegate)
+            }
+
         } catch (e: SpeechRecognitionNotAvailable) {
 
+        } catch (e: IllegalStateException) {
+            Speech.getInstance().startListening(speechProgressView, delegate)
         }
 //        builder.show()
         dialog.show()
@@ -640,7 +646,8 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             textToSpeech!!.stop()
             textToSpeech!!.shutdown()
         }
-        Speech.getInstance().shutdown();
+
+        Speech.getInstance().shutdown()
         super.onDestroy()
     }
 
