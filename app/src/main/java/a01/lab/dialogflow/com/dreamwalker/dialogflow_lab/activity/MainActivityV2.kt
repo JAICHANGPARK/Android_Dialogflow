@@ -353,6 +353,8 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         speechProgressView.setBarMaxHeightsInDp(heights)
         val dialog = builder.create()
 
+        var dialogListenFlag = false
+
         val delegate = object : SpeechDelegate {
             override fun onStartOfSpeech() {
                 toast("이야기해주세요")
@@ -411,15 +413,19 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             //Speech.getInstance().startListening(speechProgressView, delegate)
 
             if (Speech.getInstance().isListening) {
-                toast("Speech.getInstance().isListening ")
-                dialog.dismiss()
-//                Speech.getInstance().stopListening()
-//                Speech.getInstance().stopTextToSpeech()
-                if (dialog.isShowing) {
-                    toast("dialog.isShowing")
-                    dialog.dismiss()
-                }
-                Speech.getInstance().startListening(speechProgressView, delegate)
+                toast("잠시후 다시 시도해 주세요")
+
+                dialogListenFlag = true
+                Speech.getInstance().stopTextToSpeech()
+
+//                dialog.dismiss()
+////                Speech.getInstance().stopListening()
+////                Speech.getInstance().stopTextToSpeech()
+//                if (dialog.isShowing) {
+//                    toast("dialog.isShowing")
+//                    dialog.dismiss()
+//                }
+//                Speech.getInstance().startListening(speechProgressView, delegate)
             } else {
                 toast("else Speech.getInstance().isListening ")
                 if (dialog.isShowing) {
@@ -441,10 +447,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
 //        builder.show()
 
-        if (dialog.isShowing) {
+        if (dialogListenFlag) {
             Logger.getLogger(MainActivityV2::class.java.name).warning("dialog.isShowing")
-            dialog.dismiss()
-            dialog.show()
+//            dialog.dismiss()
+//            dialog.show()
         } else {
             dialog.show()
         }
