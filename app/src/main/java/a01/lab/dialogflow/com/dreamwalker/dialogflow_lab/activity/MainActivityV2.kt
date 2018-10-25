@@ -52,8 +52,8 @@ import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
 class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageInput.TypingListener,
-        MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
-        TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener, ItemClickLitsner {
+    MessageInput.AttachmentsListener, MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
+    TextToSpeech.OnInitListener, MessageInput.onMicListener, AIListener, ItemClickLitsner {
 
     override fun onItemLongCllicked(v: View, position: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -78,6 +78,8 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     var recommandList: ArrayList<String>? = null
     var recommendAdapter: ChatRecommendAdapter? = null
 
+    var autoStartVoiceInputFlag: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +92,9 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         realm = Realm.getInstance(realmConfig)
 
         val config = ai.api.android.AIConfiguration(
-                keys,
-                AIConfiguration.SupportedLanguages.Korean,
-                ai.api.android.AIConfiguration.RecognitionEngine.System
+            keys,
+            AIConfiguration.SupportedLanguages.Korean,
+            ai.api.android.AIConfiguration.RecognitionEngine.System
         )
 
         aiService = AIService.getService(this, config)
@@ -135,11 +137,16 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //        backgroundTask().execute(aiRequest)
     }
 
+
+    /**
+     * 추천 메시지를 클릭햇을 때
+     */
     override fun onItemClicked(v: View, position: Int) {
 //        toast(recommandList!![position])
-
+        autoStartVoiceInputFlag = false  // 자동 음성 기록 제거
         messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), recommandList!![position]), true)
         processResponseFromDialogFlow(recommandList!![position])
+
     }
 
     fun initRecommendList() {
@@ -171,10 +178,13 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), "안녕하세요 :)"), true)
     }
 
+
+    /**
+     * 텍스트 전송버튼을 눌렀을떄
+     */
     override fun onSubmit(input: CharSequence): Boolean {
-
+        autoStartVoiceInputFlag = false
         val result = input.toString()
-
         if (result.isNotEmpty()) {
             messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), result), true)
 
@@ -272,8 +282,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         val tmpResult = result?.result
 
         if (tmpResult != null) {
-            Logger.getLogger(MainActivity::class.java.name).warning(tmpResult.action + tmpResult.resolvedQuery + tmpResult.fulfillment)
-            Logger.getLogger(MainActivity::class.java.name).warning(tmpResult.fulfillment.source + tmpResult.fulfillment.speech)
+            Logger.getLogger(MainActivity::class.java.name)
+                .warning(tmpResult.action + tmpResult.resolvedQuery + tmpResult.fulfillment)
+            Logger.getLogger(MainActivity::class.java.name)
+                .warning(tmpResult.fulfillment.source + tmpResult.fulfillment.speech)
             messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), tmpResult.resolvedQuery), true)
             messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), tmpResult.fulfillment.speech), true)
         }
@@ -304,13 +316,14 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     override fun onVoiceStart(): Boolean {
         toast("onMic Button Clicked")
 //        aiService!!.startListening()
+        autoStartVoiceInputFlag = true
 
         val colors = intArrayOf(
-                ContextCompat.getColor(this, R.color.color1),
-                ContextCompat.getColor(this, R.color.color2),
-                ContextCompat.getColor(this, R.color.color3),
-                ContextCompat.getColor(this, R.color.color4),
-                ContextCompat.getColor(this, R.color.color5)
+            ContextCompat.getColor(this, R.color.color1),
+            ContextCompat.getColor(this, R.color.color2),
+            ContextCompat.getColor(this, R.color.color3),
+            ContextCompat.getColor(this, R.color.color4),
+            ContextCompat.getColor(this, R.color.color5)
         )
 
         val heights = intArrayOf(60, 76, 58, 80, 55)
@@ -365,6 +378,12 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //
 //                backgroundTask().execute(aiRequest)
 
+                    if (autoStartVoiceInputFlag) {
+                        onVoiceStart()
+                    } else {
+
+                    }
+
                 } else {
                     toast("공백은 전송할 수 없습니다.")
                 }
@@ -386,125 +405,125 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     fun processResponseFromDialogFlow(result: String?) {
 
         Fuel.get(
-                "https://api.dialogflow.com/v1/query?",
-                listOf(
-                        "v" to "20150910",
-                        "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
-                        "lang" to "ko",   // English language
-                        "query" to result
-                )
+            "https://api.dialogflow.com/v1/query?",
+            listOf(
+                "v" to "20150910",
+                "sessionId" to sessions,   // random ID 세션 번호가 계속 바뀌니 연속적 대화가 불가능한건가?
+                "lang" to "ko",   // English language
+                "query" to result
+            )
         ).header("Authorization" to "Bearer $keys")
-                .responseJson { _, _, result ->
+            .responseJson { _, _, result ->
 
-                    if (result.get().obj().getJSONObject("result").getJSONArray("contexts").length() != 0) {
-                        val responseName = result
-                                .get()
-                                .obj()
-                                .getJSONObject("result")
-                                .getJSONArray("contexts")
-                                .getJSONObject(0)
-                                .getString("name")
+                if (result.get().obj().getJSONObject("result").getJSONArray("contexts").length() != 0) {
+                    val responseName = result
+                        .get()
+                        .obj()
+                        .getJSONObject("result")
+                        .getJSONArray("contexts")
+                        .getJSONObject(0)
+                        .getString("name")
 
-                        val parameters = result
-                                .get()
-                                .obj()
-                                .getJSONObject("result")
-                                .getJSONArray("contexts")
-                                .getJSONObject(0)
-                                .getJSONObject("parameters")
-
-
-                        val actions = result.get().obj().getJSONObject("result").getString("action")
-
-                        val agentReply = result.get().obj()
-                                .getJSONObject("result")
-                                .getJSONObject("fulfillment")
-                                .getString("speech")
-
-                        //TODO 리코멘드 값 처리
-                        processRecommandFromDialogFlow(actions, agentReply)
-
-                        if (responseName == "writeuserrequest-yes-datain-followup") {
-
-                            val writeType = parameters.getString("WriteType")
-                            val dateTime = parameters.getString("date-time")
-                            val dateTimeOriginal = parameters.getString("date-time.original")
-                            val userTypeTime = parameters.getString("UserTypeTime")
-                            val userTypeTimeOriginal = parameters.getString("UserTypeTime.original")
-                            val timeOriginal = parameters.getString("time.original")
-                            val numberIntegerByglucose = parameters.getString("number-integer")
-                            val detailType = parameters.getString("DetailTypes")
-                            val tms = parameters.getString("time")
-
-                            Logger.getLogger(MainActivity::class.java.name).warning(
-                                    "$writeType|$dateTime|$dateTimeOriginal|" +
-                                            "$userTypeTime|$userTypeTimeOriginal|$timeOriginal" +
-                                            "|$numberIntegerByglucose|$detailType|"
-                            )
-
-//                                    String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-                            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA)
-                            val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-                            val outputTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.KOREA)
-                            val outputDateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
-                            val date = inputFormat.parse(dateTime) //2018-04-10T04:00:00.000Z
-                            val formattedDate = outputFormat.format(date)
-                            val formattedTime = outputTimeFormat.format(date)
-                            val formattedDateTime = outputDateTimeFormat.format(date)
-                            println(formattedDate) // prints 10-04-2018
+                    val parameters = result
+                        .get()
+                        .obj()
+                        .getJSONObject("result")
+                        .getJSONArray("contexts")
+                        .getJSONObject(0)
+                        .getJSONObject("parameters")
 
 
-                            realm?.executeTransaction {
-                                val gluco = realm!!.createObject(Glucose::class.java)
-                                gluco.date = date
-                                gluco.rawDate = formattedDate
-                                gluco.rawTime = formattedTime
-                                gluco.datetime = formattedDateTime
-                                gluco.userGlucoValue = numberIntegerByglucose.toFloat()
-                                gluco.userTypeTime = userTypeTime // 아침 점심 저녁
-                                gluco.userType = detailType // 운동
-                                gluco.userDetailTime = tms
-                            }
+                    val actions = result.get().obj().getJSONObject("result").getString("action")
 
-                            userExp += when (detailType) {
-                                "공복" -> 10
-                                "취침전" -> 10
-                                "취침 전" -> 10
-                                else -> 5
-                            }
+                    val agentReply = result.get().obj()
+                        .getJSONObject("result")
+                        .getJSONObject("fulfillment")
+                        .getString("speech")
 
-                            Paper.book("user").write("exp", userExp)
+                    //TODO 리코멘드 값 처리
+                    processRecommandFromDialogFlow(actions, agentReply)
 
-                            val intent = Intent(applicationContext, HomeActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
-                            finish()
+                    if (responseName == "writeuserrequest-yes-datain-followup") {
 
-                        }
+                        val writeType = parameters.getString("WriteType")
+                        val dateTime = parameters.getString("date-time")
+                        val dateTimeOriginal = parameters.getString("date-time.original")
+                        val userTypeTime = parameters.getString("UserTypeTime")
+                        val userTypeTimeOriginal = parameters.getString("UserTypeTime.original")
+                        val timeOriginal = parameters.getString("time.original")
+                        val numberIntegerByglucose = parameters.getString("number-integer")
+                        val detailType = parameters.getString("DetailTypes")
+                        val tms = parameters.getString("time")
 
                         Logger.getLogger(MainActivity::class.java.name).warning(
-                                result
-                                        .get()
-                                        .obj()
-                                        .getJSONObject("result")
-                                        .getJSONArray("contexts")
-                                        .getJSONObject(0)
-                                        .getString("name")
+                            "$writeType|$dateTime|$dateTimeOriginal|" +
+                                    "$userTypeTime|$userTypeTimeOriginal|$timeOriginal" +
+                                    "|$numberIntegerByglucose|$detailType|"
                         )
+
+//                                    String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA)
+                        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+                        val outputTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.KOREA)
+                        val outputDateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+                        val date = inputFormat.parse(dateTime) //2018-04-10T04:00:00.000Z
+                        val formattedDate = outputFormat.format(date)
+                        val formattedTime = outputTimeFormat.format(date)
+                        val formattedDateTime = outputDateTimeFormat.format(date)
+                        println(formattedDate) // prints 10-04-2018
+
+
+                        realm?.executeTransaction {
+                            val gluco = realm!!.createObject(Glucose::class.java)
+                            gluco.date = date
+                            gluco.rawDate = formattedDate
+                            gluco.rawTime = formattedTime
+                            gluco.datetime = formattedDateTime
+                            gluco.userGlucoValue = numberIntegerByglucose.toFloat()
+                            gluco.userTypeTime = userTypeTime // 아침 점심 저녁
+                            gluco.userType = detailType // 운동
+                            gluco.userDetailTime = tms
+                        }
+
+                        userExp += when (detailType) {
+                            "공복" -> 10
+                            "취침전" -> 10
+                            "취침 전" -> 10
+                            else -> 5
+                        }
+
+                        Paper.book("user").write("exp", userExp)
+
+                        val intent = Intent(applicationContext, HomeActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
+
                     }
 
-
-                    val reply = result.get().obj()
+                    Logger.getLogger(MainActivity::class.java.name).warning(
+                        result
+                            .get()
+                            .obj()
                             .getJSONObject("result")
-                            .getJSONObject("fulfillment")
-                            .getString("speech")
-
-                    Logger.getLogger(MainActivity::class.java.name).warning(reply)
-
-                    messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), reply), true)
-                    //todo dialog flow 리턴값 tts 처리
-                    speekResponse(reply)
+                            .getJSONArray("contexts")
+                            .getJSONObject(0)
+                            .getString("name")
+                    )
                 }
+
+
+                val reply = result.get().obj()
+                    .getJSONObject("result")
+                    .getJSONObject("fulfillment")
+                    .getString("speech")
+
+                Logger.getLogger(MainActivity::class.java.name).warning(reply)
+
+                messagesAdapter?.addToStart(Message("1", User("1", "agent", "1", true), reply), true)
+                //todo dialog flow 리턴값 tts 처리
+                speekResponse(reply)
+            }
 
     }
 
@@ -594,11 +613,11 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             if (result != null) {
 //                toast(result.result.fulfillment.speech)
                 messagesAdapter?.addToStart(
-                        Message(
-                                "1",
-                                User("1", "agent", "1", true),
-                                result.result.fulfillment.speech
-                        ), true
+                    Message(
+                        "1",
+                        User("1", "agent", "1", true),
+                        result.result.fulfillment.speech
+                    ), true
                 )
             }
             super.onPostExecute(result)
