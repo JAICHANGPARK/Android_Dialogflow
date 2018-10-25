@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
 
+    <release version="1.0.6" versioncode="7">
+        <change>Date : 2018-10-24</change>
+        <change>Changed : 음성대화를 하면 에이전트의 말이 끝나고 다시 자동으로 음섬대화가 가능하도록 변경했어요.</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
     <release version="1.0.5" versioncode="6">
         <change>Date : 2018-10-24</change>
         <change>Hot Fixed : OutOfIndex Crash Fixed</change>

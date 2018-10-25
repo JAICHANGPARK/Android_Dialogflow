@@ -23,7 +23,6 @@ import android.media.AudioManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -238,7 +237,6 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     }
 
 
-
     private fun speekResponse(reply: String) {
 
         if (mAudioManager != null) {
@@ -328,6 +326,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         toast("onMic Button Clicked")
 //        aiService!!.startListening()
 
+        if (textToSpeech!!.isSpeaking) {
+            textToSpeech!!.stop()
+        }
+
 
         val colors = intArrayOf(
             ContextCompat.getColor(this, R.color.color1),
@@ -406,22 +408,47 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
 
         try {
+            //Speech.getInstance().startListening(speechProgressView, delegate)
 
             if (Speech.getInstance().isListening) {
-                Speech.getInstance().stopListening()
-                Speech.getInstance().stopTextToSpeech()
+                toast("Speech.getInstance().isListening ")
+                dialog.dismiss()
+//                Speech.getInstance().stopListening()
+//                Speech.getInstance().stopTextToSpeech()
+                if (dialog.isShowing) {
+                    toast("dialog.isShowing")
+                    dialog.dismiss()
+                }
                 Speech.getInstance().startListening(speechProgressView, delegate)
             } else {
+                toast("else Speech.getInstance().isListening ")
+                if (dialog.isShowing) {
+                    dialog.dismiss()
+                }
+
                 Speech.getInstance().startListening(speechProgressView, delegate)
             }
 
         } catch (e: SpeechRecognitionNotAvailable) {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
 
         } catch (e: IllegalStateException) {
+
+            Speech.init(this, packageName)
             Speech.getInstance().startListening(speechProgressView, delegate)
         }
 //        builder.show()
-        dialog.show()
+
+        if (dialog.isShowing) {
+            Logger.getLogger(MainActivityV2::class.java.name).warning("dialog.isShowing")
+            dialog.dismiss()
+            dialog.show()
+        } else {
+            dialog.show()
+        }
+
 
 
         return true
@@ -626,35 +653,35 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
             }
 
 
-            val value = object : UtteranceProgressListener() {
-
-                override fun onDone(utteranceId: String?) {
-                    toast("말하기가 끝났어요")
-                    toast(utteranceId.toString())
-                    if (utteranceId.equals("UniqueID")){
-                        toast("말하기가 끝났어요")
-
-                        if (autoStartVoiceInputFlag) {
-                            onVoiceStart()
-                        } else {
-                            Speech.getInstance().stopListening()
-
-                        }
-                    }
-                }
-
-                override fun onError(utteranceId: String?) {
-
-                }
-
-                override fun onStart(utteranceId: String?) {
-                    toast(utteranceId.toString())
-                }
-
-            }
-
-            textToSpeech?.setOnUtteranceProgressListener(value)
-            toast("setOnUtteranceProgressListener")
+//            val value = object : UtteranceProgressListener() {
+//
+//                override fun onDone(utteranceId: String?) {
+//                    toast("말하기가 끝났어요")
+//                    toast(utteranceId.toString())
+//                    if (utteranceId.equals("UniqueID")){
+//                        toast("말하기가 끝났어요")
+//
+//                        if (autoStartVoiceInputFlag) {
+//                            onVoiceStart()
+//                        } else {
+//                            Speech.getInstance().stopListening()
+//
+//                        }
+//                    }
+//                }
+//
+//                override fun onError(utteranceId: String?) {
+//
+//                }
+//
+//                override fun onStart(utteranceId: String?) {
+//                    toast(utteranceId.toString())
+//                }
+//
+//            }
+//
+//            textToSpeech?.setOnUtteranceProgressListener(value)
+//            toast("setOnUtteranceProgressListener")
 
         } else {
             toast("TTS 실패!")
@@ -677,6 +704,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
             toast("말하기가 끝났어요")
+
+            if (autoStartVoiceInputFlag) {
+                onVoiceStart()
+            }
         }
     }
 
