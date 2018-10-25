@@ -317,6 +317,11 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         toast("onMic Button Clicked")
 //        aiService!!.startListening()
 
+        if (Speech.getInstance().isListening){
+            Speech.getInstance().stopListening()
+        }
+
+
 
         val colors = intArrayOf(
             ContextCompat.getColor(this, R.color.color1),
