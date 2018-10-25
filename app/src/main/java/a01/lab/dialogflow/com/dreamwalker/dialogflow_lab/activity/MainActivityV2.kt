@@ -316,7 +316,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     override fun onVoiceStart(): Boolean {
         toast("onMic Button Clicked")
 //        aiService!!.startListening()
-        autoStartVoiceInputFlag = true
+
 
         val colors = intArrayOf(
             ContextCompat.getColor(this, R.color.color1),
@@ -369,7 +369,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //                Log.i("speech", "result: " + result)
                 if (result != null && result.isNotEmpty()) {
                     messagesAdapter?.addToStart(Message("0", User("0", "avater", "0", true), result), true)
-
+                    autoStartVoiceInputFlag = true
                     processResponseFromDialogFlow(result)
 
 //                aiRequest!!.sessionId = senderId
@@ -381,10 +381,13 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
                     if (autoStartVoiceInputFlag) {
                         onVoiceStart()
                     } else {
-
+                        Speech.getInstance().stopListening()
                     }
 
+
+
                 } else {
+
                     toast("공백은 전송할 수 없습니다.")
                 }
                 dialog.dismiss()
@@ -398,6 +401,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
 //        builder.show()
         dialog.show()
+
 
         return true
     }
