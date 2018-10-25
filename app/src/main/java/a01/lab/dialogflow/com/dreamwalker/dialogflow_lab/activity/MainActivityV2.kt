@@ -22,8 +22,8 @@ import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -81,7 +81,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
     var autoStartVoiceInputFlag: Boolean = false
 
-
+    var ttsMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_v2)
@@ -120,6 +120,10 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         input.setMicListener(this)
 
         textToSpeech = TextToSpeech(this, this)
+
+
+
+
         mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         Speech.init(this, packageName)
@@ -234,14 +238,20 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     }
 
 
+
     private fun speekResponse(reply: String) {
 
         if (mAudioManager != null) {
             when (mAudioManager!!.ringerMode) {
 
                 AudioManager.RINGER_MODE_NORMAL -> {
+                    val params = Bundle()
+                    params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "")
                     val utteranceId = this.hashCode().toString() + ""
-                    textToSpeech?.speak(reply, TextToSpeech.QUEUE_FLUSH, null, utteranceId)
+//                    textToSpeech?.speak(reply, TextToSpeech.QUEUE_FLUSH, params, utteranceId)
+                    textToSpeech?.speak(reply, TextToSpeech.QUEUE_FLUSH, params, "UniqueID")
+                    Waiter().execute()
+
                 }
 
                 AudioManager.RINGER_MODE_VIBRATE -> {
@@ -378,14 +388,14 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 //                aiRequest!!.setQuery(result)
 //
 //                backgroundTask().execute(aiRequest)
-                    Handler().postDelayed({
-                        if (autoStartVoiceInputFlag) {
-                            onVoiceStart()
-                        } else {
-                            Speech.getInstance().stopListening()
-                            dialog.dismiss()
-                        }
-                    }, 5000)
+//                    Handler().postDelayed({
+//                        if (autoStartVoiceInputFlag) {
+//                            onVoiceStart()
+//                        } else {
+//                            Speech.getInstance().stopListening()
+//                            dialog.dismiss()
+//                        }
+//                    }, 5000)
 
                 } else {
 
@@ -542,7 +552,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
     }
 
-    fun processRecommandFromDialogFlow(action: String?, agentReply: String) {
+    private fun processRecommandFromDialogFlow(action: String?, agentReply: String) {
 
 
         if ("맞나요?" in agentReply) {
@@ -597,17 +607,78 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
         }
     }
 
+
+    /**
+     * TTS 초기화 하기 - 박제창
+     */
     override fun onInit(status: Int) {
+        toast("tts init called")
+
         if (status == TextToSpeech.SUCCESS) {
+
             textToSpeech?.language = Locale.KOREA
+
             val language = textToSpeech?.setLanguage(Locale.KOREAN)
+
 
             if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED) {
                 toast("지원하지 않는 언어입니다.")
             }
+
+
+            val value = object : UtteranceProgressListener() {
+
+                override fun onDone(utteranceId: String?) {
+                    toast("말하기가 끝났어요")
+                    toast(utteranceId.toString())
+                    if (utteranceId.equals("UniqueID")){
+                        toast("말하기가 끝났어요")
+
+                        if (autoStartVoiceInputFlag) {
+                            onVoiceStart()
+                        } else {
+                            Speech.getInstance().stopListening()
+
+                        }
+                    }
+                }
+
+                override fun onError(utteranceId: String?) {
+
+                }
+
+                override fun onStart(utteranceId: String?) {
+                    toast(utteranceId.toString())
+                }
+
+            }
+
+            textToSpeech?.setOnUtteranceProgressListener(value)
+            toast("setOnUtteranceProgressListener")
+
         } else {
             toast("TTS 실패!")
         }
+
+    }
+
+    internal inner class Waiter : AsyncTask<Void, Void, Void>() {
+        override fun doInBackground(vararg voids: Void): Void? {
+            while (textToSpeech!!.isSpeaking) {
+                try {
+                    Thread.sleep(1000)
+                } catch (e: Exception) {
+                }
+
+            }
+            return null
+        }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            toast("말하기가 끝났어요")
+        }
+
     }
 
 
