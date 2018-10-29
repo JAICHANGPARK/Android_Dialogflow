@@ -265,15 +265,16 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     }
 
     override fun onStartTyping() {
-        Toast.makeText(this, "onStartTyping", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "onStartTyping", Toast.LENGTH_SHORT).show()
     }
 
     override fun onStopTyping() {
-        Toast.makeText(this, "onStopTyping", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "onStopTyping", Toast.LENGTH_SHORT).show()
     }
 
     override fun onAddAttachments() {
-        Toast.makeText(this, "onAddAttachments", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "onAddAttachments", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "아직 지원하지 않습니다.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onSelectionChanged(count: Int) {
@@ -323,7 +324,8 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
 
     override fun onVoiceStart(): Boolean {
-        toast("onMic Button Clicked")
+//        toast("onMic Button Clicked")
+        toast("음성 입력")
 //        aiService!!.startListening()
 
         if (textToSpeech!!.isSpeaking) {
@@ -645,7 +647,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
      * TTS 초기화 하기 - 박제창
      */
     override fun onInit(status: Int) {
-        toast("tts init called")
+        //toast("tts init called")
 
         if (status == TextToSpeech.SUCCESS) {
 

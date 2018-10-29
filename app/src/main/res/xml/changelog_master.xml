@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
 
+    <release version="1.0.8" versioncode="9">
+        <change>Date : 2018-10-29</change>
+        <change>불필요한 메세지를 수정했어요.</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+
     <release version="1.0.7" versioncode="8">
         <change>Date : 2018-10-26</change>
         <change>Hot Fixed : OutOfIndex Crash Fixed</change>
