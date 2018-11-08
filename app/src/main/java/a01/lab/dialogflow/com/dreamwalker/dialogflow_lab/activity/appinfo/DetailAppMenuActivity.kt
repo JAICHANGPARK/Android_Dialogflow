@@ -16,6 +16,7 @@ class DetailAppMenuActivity : AppCompatActivity() {
         buttonInformation0.setOnClickListener {
             startActivity(Intent(this, AboutProjectActivity::class.java))
         }
+
         buttonInformation1.setOnClickListener {
 
             startActivity( Intent(this, AboutAppActivity::class.java))

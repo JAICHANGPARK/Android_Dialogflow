@@ -37,6 +37,5 @@ class WebActivity : AppCompatActivity() {
                 web_view.loadUrl(intent.getStringExtra(IntentConst.WEB_URL))
             }
         }
-
     }
 }
