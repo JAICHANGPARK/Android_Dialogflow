@@ -150,6 +150,19 @@ class AnalysisFragment : Screen() {
                         entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
                     }
                     val lineDataSet = LineDataSet(entries, "혈당 수치")
+
+                    with(lineDataSet) {
+                        mode = LineDataSet.Mode.CUBIC_BEZIER
+                        cubicIntensity = 0.15f
+
+                        color = ContextCompat.getColor(activity!!.applicationContext, R.color.colorAccent)
+                        setCircleColor(ContextCompat.getColor(activity!!.applicationContext, R.color.colorPrimary))
+
+                        circleRadius = 6.0f
+                        circleHoleRadius = 3.0f
+                        lineWidth = 3.0f
+                    }
+
                     val lineData = LineData(lineDataSet)
 
                     with(line_chart) {
@@ -182,6 +195,19 @@ class AnalysisFragment : Screen() {
                         entries.add(Entry(i.toFloat(), allGlucose[i]!!.userGlucoValue!!.toFloat()))
                     }
                     val lineDataSet = LineDataSet(entries, "혈당 수치")
+
+                    with(lineDataSet) {
+                        mode = LineDataSet.Mode.CUBIC_BEZIER
+                        cubicIntensity = 0.15f
+
+                        color = ContextCompat.getColor(activity!!.applicationContext, R.color.colorAccent)
+                        setCircleColor(ContextCompat.getColor(activity!!.applicationContext, R.color.colorPrimary))
+
+                        circleRadius = 6.0f
+                        circleHoleRadius = 3.0f
+                        lineWidth = 3.0f
+                    }
+
                     val lineData = LineData(lineDataSet)
 
                     with(line_chart) {
