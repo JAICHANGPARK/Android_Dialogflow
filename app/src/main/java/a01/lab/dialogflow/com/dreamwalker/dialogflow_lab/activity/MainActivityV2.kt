@@ -23,17 +23,19 @@ import android.media.AudioManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.crashlytics.android.Crashlytics
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
+import io.fabric.sdk.android.Fabric
 import io.paperdb.Paper
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -84,6 +86,7 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_v2)
+        Fabric.with(this, Crashlytics())
         Realm.init(this)
 
         title = "당뇨모리..AI 상담원과 대화"

@@ -14,8 +14,10 @@ import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.crashlytics.android.Crashlytics
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import io.fabric.sdk.android.Fabric
 import io.paperdb.Paper
 import kotlinx.android.synthetic.main.activity_home.*
 import lab.dialogflow.com.dreamwalker.backdrop.BackdropBehavior
@@ -51,6 +53,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         Paper.init(this)
+        Fabric.with(this, Crashlytics())
 //        val androidIDs = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
 //        toast(androidIDs.toString())
 

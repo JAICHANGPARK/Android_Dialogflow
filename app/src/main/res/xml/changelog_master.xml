@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
 
+    <release version="1.0.10" versioncode="11">
+        <change>Date : 2018-11-22</change>
+        <change>이제 혈당 기록 수정이 가능합니다.</change>
+        <change>Migrate Android X</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+
+    <release version="1.0.9" versioncode="10">
+        <change>Date : 2018-10-29</change>
+        <change>그래프 레이아웃 수정.</change>
+        <change>오류 수정.</change>
+        <change>Made by JAICHANGPARK (DREAMWALKER)</change>
+    </release>
+
     <release version="1.0.8" versioncode="9">
         <change>Date : 2018-10-29</change>
         <change>불필요한 메세지를 수정했어요.</change>
