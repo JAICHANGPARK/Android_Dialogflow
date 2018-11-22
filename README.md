@@ -38,9 +38,6 @@
 <td style="text-align: center">
 <img  src ="https://github.com/JAICHANGPARK/Android_Dialogflow/blob/master/screenshot/device-2018-10-23-224727.png" width ="200">
 </td>
-
-  
-
 </tr>
 </table>
 </div>
