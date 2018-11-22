@@ -18,15 +18,15 @@ package lab.dialogflow.com.dreamwalker.chatkit.dialogs;
 
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import lab.dialogflow.com.dreamwalker.chatkit.R;
 import lab.dialogflow.com.dreamwalker.chatkit.commons.ImageLoader;
 import lab.dialogflow.com.dreamwalker.chatkit.commons.ViewHolder;

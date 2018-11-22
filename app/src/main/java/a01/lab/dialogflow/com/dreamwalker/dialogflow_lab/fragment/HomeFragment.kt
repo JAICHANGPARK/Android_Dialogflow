@@ -139,7 +139,9 @@ class HomeFragment : Screen(), ItemClickLitsner {
 //        activity!!.toast(position.toString())
         val alertDialog = AlertDialog.Builder(activity!!.baseContext)
         val intent = Intent(activity, EditGlucoseActivity::class.java)
+        intent.putExtra("datetime", glucoseArrayList[position].datetime)
         activity!!.startActivity(intent)
+
         activity!!.finish()
     }
 

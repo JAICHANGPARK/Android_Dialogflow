@@ -17,12 +17,12 @@
 package lab.dialogflow.com.dreamwalker.chatkit.dialogs;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.util.AttributeSet;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import lab.dialogflow.com.dreamwalker.chatkit.commons.models.IDialog;
 
 

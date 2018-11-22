@@ -9,252 +9,259 @@
                                                      tools:context=".activity.diary.EditGlucoseActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_add_contacts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/default_background"
-        android:theme="@style/AppTheme.AppBarOverlay">
+            android:id="@+id/appbar_add_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/default_background"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/home"
-                style="@style/ClickableImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="start"
-                android:layout_margin="8dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_arrow_back_black_24dp" />
+                    android:id="@+id/home"
+                    style="@style/ClickableImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="start"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_back_black_24dp"/>
 
             <ImageView
-                android:id="@+id/done"
-                style="@style/ClickableImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="start"
-                android:layout_margin="8dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_check_black_24dp" />
+                    android:id="@+id/done"
+                    style="@style/ClickableImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="start"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_check_black_24dp"/>
         </RelativeLayout>
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/default_background"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Edit Glucose"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
-            app:titleTextColor="@color/black" />
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/default_background"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="Edit Glucose"
+                app:titleTextAppearance="@style/Toolbar.TitleText"
+                app:titleTextColor="@color/black"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nsv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:id="@+id/nsv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/appbar_add_contacts"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp">
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_below="@+id/appbar_add_contacts"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp">
 
-                <LinearLayout
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="날짜 및 시간 정보"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="날짜 및 시간 정보"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"/>
                 </LinearLayout>
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/divider" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/divider"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="6">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:layout_weight="5">
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:layout_weight="5">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/date_edt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="날짜"
-                            android:inputType="date"
-                            android:maxLines="1" />
+                                android:id="@+id/date_edt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="날짜"
+                                android:inputType="date"
+                                android:maxLines="1"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
-                        android:id="@+id/date_button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_date_range_black_24dp" />
+                            android:id="@+id/date_button"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_date_range_black_24dp"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="6">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:layout_weight="5">
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:layout_weight="5">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/time_edt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="시간"
-                            android:inputType="time"
-                            android:maxLines="1" />
+                                android:id="@+id/time_edt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="시간"
+                                android:inputType="time"
+                                android:maxLines="1"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
-                        android:id="@+id/time_button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_access_time_black_24dp" />
+                            android:id="@+id/time_button"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_access_time_black_24dp"/>
 
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="8dp"
-                        android:text="측정 구분 (유형)"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="8dp"
+                            android:text="측정 구분 (유형)"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"/>
 
                     <ImageView
-                        android:id="@+id/type_info_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="8dp"
-                        android:src="@drawable/ic_info_outline_black_24dp" />
+                            android:id="@+id/type_info_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/ic_info_outline_black_24dp"/>
 
                 </RelativeLayout>
 
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/divider" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/divider"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
 
                     <org.angmarch.views.NiceSpinner
-                        android:id="@+id/nice_spinner"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1" />
+                            android:id="@+id/nice_spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:layout_weight="1"/>
 
                     <org.angmarch.views.NiceSpinner
-                        android:id="@+id/nice_spinner_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1" />
+                            android:id="@+id/nice_spinner_2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:layout_weight="1"/>
+
+                    <org.angmarch.views.NiceSpinner
+                            android:id="@+id/nice_spinner_3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:layout_weight="1"/>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="혈당 정보"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="혈당 정보"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"/>
 
                 </LinearLayout>
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/divider" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/divider"/>
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="24dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/glucose_value_edt"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="혈당 수치 (mg/dL)"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:maxLines="1" />
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="24dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/glucose_value_edt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="혈당 수치 (mg/dL)"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:maxLines="1"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -263,25 +270,25 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="bottom"
-        app:backgroundTint="@color/default_background"
-        app:fabAlignmentMode="end"
-        app:fabCradleRoundedCornerRadius="10dp"
-        app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:navigationIcon="@drawable/ic_menu_black_24dp"
-        app:titleTextColor="@android:color/black" />
+            android:id="@+id/bottomAppBar"
+            style="@style/Widget.MaterialComponents.BottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@color/default_background"
+            app:fabAlignmentMode="end"
+            app:fabCradleRoundedCornerRadius="10dp"
+            app:hideOnScroll="true"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@drawable/ic_menu_black_24dp"
+            app:titleTextColor="@android:color/black"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_undo_black_24dp"
-        app:layout_anchor="@id/bottomAppBar" />
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_undo_black_24dp"
+            app:layout_anchor="@id/bottomAppBar"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
