@@ -1,12 +1,15 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment
 
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
+import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity.diary.EditGlucoseActivity
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.HomeScreenAdapter
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter.ItemClickLitsner
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Build
 import android.support.v4.content.ContextCompat.getColor
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -131,6 +134,10 @@ class HomeFragment : Screen(), ItemClickLitsner {
     override fun onItemClicked(v: View, position: Int) {
 
 //        activity!!.toast(position.toString())
+        val alertDialog = AlertDialog.Builder(activity!!.baseContext)
+        val intent = Intent(activity, EditGlucoseActivity::class.java)
+        activity!!.startActivity(intent)
+        activity!!.finish()
     }
 
     override fun onItemLongCllicked(v: View, position: Int) {
