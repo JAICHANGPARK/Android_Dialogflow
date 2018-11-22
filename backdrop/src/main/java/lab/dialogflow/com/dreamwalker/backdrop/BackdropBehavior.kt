@@ -3,14 +3,14 @@ package lab.dialogflow.com.dreamwalker.backdrop
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.annotation.IdRes
-import android.support.design.widget.CoordinatorLayout
-import android.support.v7.widget.Toolbar
+import androidx.annotation.IdRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.appcompat.widget.Toolbar
 import android.util.AttributeSet
 import android.view.View
 
 
-class BackdropBehavior : CoordinatorLayout.Behavior<View> {
+class BackdropBehavior : androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior<View> {
 
     enum class DropState {
         OPEN,
@@ -48,19 +48,19 @@ class BackdropBehavior : CoordinatorLayout.Behavior<View> {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    override fun onSaveInstanceState(parent: CoordinatorLayout, child: View): Parcelable {
+    override fun onSaveInstanceState(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, child: View): Parcelable {
         return Bundle().apply {
             putSerializable(ARG_DROP_STATE, dropState)
         }
     }
 
-    override fun onRestoreInstanceState(parent: CoordinatorLayout, child: View, state: Parcelable) {
+    override fun onRestoreInstanceState(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, child: View, state: Parcelable) {
         super.onRestoreInstanceState(parent, child, state)
 
             dropState = (state as? Bundle)?.getSerializable(ARG_DROP_STATE) as? DropState ?: DEFAULT_DROP_STATE
     }
 
-    override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
+    override fun layoutDependsOn(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, child: View, dependency: View): Boolean {
         if (toolbarId == null || backContainerId == null) return false
 
         return when (dependency.id) {
@@ -70,7 +70,7 @@ class BackdropBehavior : CoordinatorLayout.Behavior<View> {
         }
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
+    override fun onDependentViewChanged(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, child: View, dependency: View): Boolean {
 
         this.child = child
         when (dependency.id) {
@@ -135,7 +135,7 @@ class BackdropBehavior : CoordinatorLayout.Behavior<View> {
         true
     }
 
-    private fun initViews(parent: CoordinatorLayout, child: View, toolbar: Toolbar, backContainer: View) {
+    private fun initViews(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, child: View, toolbar: Toolbar, backContainer: View) {
         backContainer.y = toolbar.y + toolbar.height
         child.layoutParams.height = parent.height - toolbar.height
         drawDropState(child, toolbar, backContainer, false)

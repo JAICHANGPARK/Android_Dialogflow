@@ -3,7 +3,7 @@ package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity.appinfo
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import de.cketti.library.changelog.ChangeLog
 import kotlinx.android.synthetic.main.activity_detail_app_menu.*
 

@@ -8,11 +8,11 @@ import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
-import android.support.v4.content.ContextCompat.getColor
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getColor
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import devs.mulham.horizontalcalendar.HorizontalCalendar
 import devs.mulham.horizontalcalendar.model.CalendarEvent
 import devs.mulham.horizontalcalendar.utils.CalendarEventsPredicate
@@ -109,7 +109,10 @@ class HomeFragment : Screen(), ItemClickLitsner {
 
         horizontalCalendar.calendarListener = listener
 
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
+        val dividerItemDecoration = DividerItemDecoration(
+            recyclerView.context,
+            LinearLayoutManager.VERTICAL
+        )
         with(recyclerView) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)

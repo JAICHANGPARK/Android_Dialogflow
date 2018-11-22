@@ -23,11 +23,11 @@ import android.media.AudioManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -135,7 +135,11 @@ class MainActivityV2 : AppCompatActivity(), MessageInput.InputListener, MessageI
 
         with(recycler_view) {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(
+                applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
             adapter = recommendAdapter
         }
 //        backgroundTask().execute(aiRequest)

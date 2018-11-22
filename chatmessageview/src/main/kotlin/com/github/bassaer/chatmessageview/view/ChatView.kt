@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Handler
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.widget.SwipeRefreshLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -282,7 +282,7 @@ class ChatView : LinearLayout {
         this.isEnableAutoHidingKeyboard = autoHidingKeyboard
     }
 
-    fun setOnRefreshListener(listener: SwipeRefreshLayout.OnRefreshListener) {
+    fun setOnRefreshListener(listener: androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener) {
         chatContainer.setOnRefreshListener(listener)
     }
 

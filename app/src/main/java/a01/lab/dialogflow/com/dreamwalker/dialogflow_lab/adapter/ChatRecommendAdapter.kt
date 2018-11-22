@@ -2,7 +2,7 @@ package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.adapter
 
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

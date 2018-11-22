@@ -1,8 +1,8 @@
 package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab
 
 import android.content.Context
-import android.support.annotation.LayoutRes
-import android.support.design.widget.CoordinatorLayout
+import androidx.annotation.LayoutRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

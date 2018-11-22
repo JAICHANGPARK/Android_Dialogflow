@@ -16,7 +16,7 @@
 
 package lab.dialogflow.com.dreamwalker.chatkit.commons.models;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import lab.dialogflow.com.dreamwalker.chatkit.messages.MessageHolders;
 
 /*

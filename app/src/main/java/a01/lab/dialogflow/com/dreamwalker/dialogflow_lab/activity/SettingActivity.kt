@@ -7,8 +7,8 @@ import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity.appinfo.Feedba
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.activity.appinfo.OpenSourceLicenseActivity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_setting.*
 import org.jetbrains.anko.toast
 

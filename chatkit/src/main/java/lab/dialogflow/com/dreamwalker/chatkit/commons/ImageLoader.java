@@ -16,7 +16,7 @@
 
 package lab.dialogflow.com.dreamwalker.chatkit.commons;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
 /**

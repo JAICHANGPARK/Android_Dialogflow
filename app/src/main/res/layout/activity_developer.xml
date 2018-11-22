@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:id="@+id/coordinator_layout"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 tools:context=".activity.appinfo.DeveloperActivity">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     xmlns:tools="http://schemas.android.com/tools"
+                                                     android:id="@+id/coordinator_layout"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     tools:context=".activity.appinfo.DeveloperActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_add_contacts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/default_background"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -31,9 +31,9 @@
             android:layout_gravity="center"
             android:text="Developer"
             android:textColor="@color/black"/>
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 app:strokeColor="@color/colorPrimary"
                 app:backgroundTint="@color/white"
                 app:cornerRadius="8dp"
@@ -80,7 +80,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 app:strokeColor="@color/colorPrimary"
                 app:backgroundTint="@color/white"
                 android:id="@+id/qiitaButton"
@@ -98,8 +98,8 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

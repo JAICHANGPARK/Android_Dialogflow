@@ -2,8 +2,8 @@ package a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.fragment
 
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.model.Glucose
-import android.support.v4.content.ContextCompat
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData

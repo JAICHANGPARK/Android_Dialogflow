@@ -19,7 +19,7 @@ package lab.dialogflow.com.dreamwalker.chatkit.messages;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.support.v4.widget.Space;
 import android.text.Editable;
 import android.text.TextWatcher;

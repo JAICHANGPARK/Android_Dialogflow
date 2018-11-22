@@ -4,7 +4,7 @@ import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.R
 import a01.lab.dialogflow.com.dreamwalker.dialogflow_lab.consts.IntentConst
 import android.app.AlertDialog
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
